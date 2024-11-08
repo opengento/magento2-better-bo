@@ -43,3 +43,6 @@
 /var/package/*
 !/var/package/*.xml
 
+node_modules
+.idea
+.vscode
