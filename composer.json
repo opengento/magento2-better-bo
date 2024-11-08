@@ -1,0 +1,26 @@
+{
+    "name": "opengento/magento2-better-bo",
+    "description": "Magento 2 module BetterBo by Opengento.",
+    "type": "magento2-module",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Alexandre Buleté",
+            "email": "bulete.alexandre@gmail.com",
+            "role": "Full Stack Developer"
+        }
+    ],
+    "require": {
+        "php": "8.x"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": false,
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Opengento\\BetterBo\\": ""
+        }
+    }
+}
