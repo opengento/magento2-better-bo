@@ -1,26 +1,45 @@
 {
-    "name": "opengento/magento2-better-bo",
-    "description": "Magento 2 module BetterBo by Opengento.",
-    "type": "magento2-module",
-    "version": "1.0.0",
-    "authors": [
-        {
-            "name": "Alexandre Buleté",
-            "email": "bulete.alexandre@gmail.com",
-            "role": "Full Stack Developer"
-        }
-    ],
-    "require": {
-        "php": "8.x"
+  "name": "opengento/magento2-better-bo",
+  "description": "Magento 2 module BetterBo by Opengento.",
+  "type": "magento2-module",
+  "version": "1.0.0",
+  "authors": [
+    {
+      "name": "Alexandre BULETÉ",
+      "email": "bulete.alexandre@gmail.com"
     },
-    "minimum-stability": "stable",
-    "prefer-stable": false,
-    "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "Opengento\\BetterBo\\": ""
-        }
+    {
+      "name": "Frédéric MARTINEZ",
+      "email": "frederic.martinez@ph2m.com"
+    },
+    {
+      "name": "Quentin MENDEL",
+      "email": "q.mendel@boeki.fr"
+    },
+    {
+      "name": "Romain TESSON",
+      "email": "rtesson@bird.eu"
+    },
+    {
+      "name": "Sébastien GUÉRIN",
+      "email": "sebastien@bird.eu"
+    },
+    {
+      "name": "Thomas MOUTLEN",
+      "email": "thomas.moutlen@ph2m.com"
     }
+  ],
+  "require": {
+    "php": "8.x"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": false,
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Opengento\\BetterBo\\": ""
+    }
+  }
 }

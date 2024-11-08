@@ -66,11 +66,11 @@ Raise a new [request](https://github.com/opengento/magento2-better-bo/issues) to
 ## Authors
 
 - **Opengento Community** - *Lead* - [![Twitter Follow](https://img.shields.io/twitter/follow/opengento.svg?style=social)](https://twitter.com/opengento)
-- **Alexandre Buleté** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/alexandrebulete.svg?style=social)](https://github.com/alexandrebulete)
+- **Alexandre BULETÉ** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/alexandrebulete.svg?style=social)](https://github.com/alexandrebulete)
 - **Frédéric MARTINEZ** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/FredericMartinez.svg?style=social)](https://github.com/FredericMartinez)
-- **Quentin Mendel** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/quentinmdl.svg?style=social)](https://github.com/quentinmdl)
-- **Romain Tesson** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/rtesson-bird.svg?style=social)](https://github.com/rtesson-bird)
-- **Sébastien Guérin** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/sebastienbird.svg?style=social)](https://github.com/sebastienbird)
+- **Quentin MENDEL** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/quentinmdl.svg?style=social)](https://github.com/quentinmdl)
+- **Romain TESSON** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/rtesson-bird.svg?style=social)](https://github.com/rtesson-bird)
+- **Sébastien GUÉRIN** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/sebastienbird.svg?style=social)](https://github.com/sebastienbird)
 - **Thomas MOUTLEN** - *Maintainer* - [![GitHub followers](https://img.shields.io/github/followers/THOMASPH2M.svg?style=social)](https://github.com/THOMASPH2M)
 - **Contributors** - *Contributor* - [![GitHub contributors](https://img.shields.io/github/contributors/opengento/magento2-better-bo.svg?style=flat-square)](https://github.com/opengento/magento2-better-bo/graphs/contributors)
 
