@@ -1,0 +1,41 @@
+{
+    "name": "opengento-betterbo",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "production": "mix --production"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "laravel-mix": "^6.0.31",
+        "laravel-mix-purgecss": "^6.0.0",
+        "lodash": "^4.17.21",
+        "resolve-url-loader": "^5.0.0",
+        "sass": "^1.58.0",
+        "sass-loader": "^12.6.0",
+        "ts-loader": "^9.4.2",
+        "typescript": "^4.9.5",
+        "unplugin-element-plus": "^0.7.2",
+        "vue-loader": "^16.8.3"
+    },
+    "dependencies": {
+        "@vueuse/core": "^10.3.0",
+        "axios": "^1.3.4",
+        "axios-cache-interceptor": "^1.0.1",
+        "element-plus": "^2.4.4",
+        "path": "^0.12.7",
+        "pinia": "^2.0.30",
+        "vue": "^3.2.47",
+        "vue-i18n": "^9.2.2",
+        "vue-slide-toggle": "^1.1.1",
+        "vue-unicons": "^3.3.1",
+        "vue3-shimmer": "^1.0.2"
+    }
+}
