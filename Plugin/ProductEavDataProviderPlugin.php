@@ -62,7 +62,7 @@ class ProductEavDataProviderPlugin
         $currentStoreViewId = $this->storeManager->getStore()->getId();
 
         if ((int) $currentStoreViewId === (int) $adminStoreViewId) {
-            $result['arguments']['data']['config']['storebtn'] = '<button class=\'btn-store-view\' data-attribute-code=\'{$attributeCode}\'>'.$storeSvg.'</button>';
+            $result['arguments']['data']['config']['storebtn'] = '<button class=\'btn-store-view\' data-attribute-code=\'' . $attributeCode . '\'>' . $storeSvg . '</button>';
         }
 
         return $result;
