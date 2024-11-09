@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Opengento\BetterBo\Model;
 
-use Opengento\BetterBo\Api\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Opengento\BetterBo\Api\ConfigInterface;
 
 class Config implements ConfigInterface
 {

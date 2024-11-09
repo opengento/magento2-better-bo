@@ -2,7 +2,7 @@
 
 namespace Opengento\BetterBo\Api\Data;
 
-interface SaveResponseInterface
+interface DeleteResponseInterface
 {
     /**
      * @return string
@@ -25,15 +25,4 @@ interface SaveResponseInterface
      * @return void
      */
     public function setMessage(string $message): void;
-
-    /**
-     * @return \Opengento\BetterBo\Api\Data\SaveResponseValueInterface|null
-     */
-    public function getData(): ?\Opengento\BetterBo\Api\Data\SaveResponseValueInterface;
-
-    /**
-     * @param \Opengento\BetterBo\Api\Data\SaveResponseValueInterface $data
-     * @return void
-     */
-    public function setData(\Opengento\BetterBo\Api\Data\SaveResponseValueInterface $data): void;
 }

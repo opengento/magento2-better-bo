@@ -16,7 +16,7 @@ class GetPayload implements GetPayloadInterface
 
     public function setAttributeCode(string $attribute): void
     {
-       $this->attributeCode = $attribute;
+        $this->attributeCode = $attribute;
     }
 
     public function getEntityId(): int

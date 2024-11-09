@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model;
+namespace Opengento\BetterBo\Model\Service;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -38,11 +38,10 @@ class GetProductAttributes implements GetProductAttributesInterface
     public function __construct(
         protected GroupRepositoryInterface                                       $groupRepository,
         protected AttributeRepositoryInterface                                   $attributeRepository,
-        protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        protected CollectionFactory $productCollectionFactory,
         protected StoreManagerInterface                                          $storeManager,
         protected ProductRepositoryInterface                                     $productRepository,
-    )
-    {
+    ) {
     }
 
     /**
@@ -53,7 +52,7 @@ class GetProductAttributes implements GetProductAttributesInterface
     {
         return [
             'config' => $this->getAttributeConfig($payload->getAttributeCode()),
-            'values' => $this->getAttributeValues($payload)
+            'values' => $this->getAttributeValues($payload),
         ];
     }
 
@@ -75,15 +74,14 @@ class GetProductAttributes implements GetProductAttributesInterface
             'type' => $attribute->getFrontendInput(),
             'frontendLabel' => $attribute->getDefaultFrontendLabel(),
             'options' => array_map(
-                static fn(AttributeOptionInterface $option) => [
+                static fn (AttributeOptionInterface $option) => [
                     'label' => $option->getLabel(),
-                    'value' => (string)$option->getValue()
+                    'value' => (string)$option->getValue(),
                 ],
                 $attribute->getOptions()
             ),
         ];
     }
-
 
     /**
      * @param GetPayloadInterface $payload
@@ -100,7 +98,7 @@ class GetProductAttributes implements GetProductAttributesInterface
             $results[] = [
                 'storeViewId' => $storeView->getId(),
                 'storeViewLabel' => $this->buildStoreViewLabel($storeView),
-                'value' => $product->getData($payload->getAttributeCode())
+                'value' => $product->getData($payload->getAttributeCode()),
             ];
         }
 
@@ -132,8 +130,6 @@ class GetProductAttributes implements GetProductAttributesInterface
 
     protected function sortResults(array &$results): void
     {
-        usort($results, function ($a, $b) {
-            return strcmp($a['storeViewLabel'], $b['storeViewLabel']);
-        });
+        usort($results, fn ($a, $b) => strcmp($a['storeViewLabel'], $b['storeViewLabel']));
     }
 }
