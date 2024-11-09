@@ -12,5 +12,7 @@
     <preference for="Opengento\BetterBo\Api\Data\SaveResponseInterface" type="Opengento\BetterBo\Model\Data\Save\SaveResponse" />
     <preference for="Opengento\BetterBo\Api\Data\SaveResponseValueInterface" type="Opengento\BetterBo\Model\Data\Save\SaveResponseValue" />
     <preference for="Opengento\BetterBo\Api\ProductManagementInterface" type="Opengento\BetterBo\Model\ProductManagement" />
-    <preference for="Opengento\BetterBo\Api\GetProductAttributesInterface" type="Opengento\BetterBo\Model\GetProductAttributes" />
+    <preference for="Opengento\BetterBo\Api\GetProductAttributesInterface" type="Opengento\BetterBo\Model\Service\GetProductAttributes" />
+    <preference for="Opengento\BetterBo\Api\Data\DeleteResponseInterface" type="Opengento\BetterBo\Model\Data\Delete\DeleteResponse" />
+    <preference for="Opengento\BetterBo\Api\Data\DeletePayloadInterface" type="Opengento\BetterBo\Model\Data\Delete\DeletePayload" />
 </config>

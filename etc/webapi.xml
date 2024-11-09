@@ -23,4 +23,12 @@
             <resource ref="anonymous" />
         </resources>
     </route>
+
+    <!-- Save as null product attribute for specific store view -->
+    <route url="/V1/betterbo/catalog/product/attributes/delete" method="DELETE">
+        <service class="Opengento\BetterBo\Api\ProductManagementInterface" method="deleteProductData"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>

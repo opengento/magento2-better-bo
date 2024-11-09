@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model;
+namespace Opengento\BetterBo\Model\Service;
 
 use Magento\Catalog\Model\Product\Action;
 use Opengento\BetterBo\Api\Data\SavePayloadInterface;

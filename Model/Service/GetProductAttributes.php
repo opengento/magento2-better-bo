@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model;
+namespace Opengento\BetterBo\Model\Service;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -38,7 +38,7 @@ class GetProductAttributes implements GetProductAttributesInterface
     public function __construct(
         protected GroupRepositoryInterface                                       $groupRepository,
         protected AttributeRepositoryInterface                                   $attributeRepository,
-        protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        protected CollectionFactory $productCollectionFactory,
         protected StoreManagerInterface                                          $storeManager,
         protected ProductRepositoryInterface                                     $productRepository,
     )

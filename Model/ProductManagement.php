@@ -13,17 +13,22 @@ namespace Opengento\BetterBo\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
+use Opengento\BetterBo\Api\Data\DeletePayloadInterface;
+use Opengento\BetterBo\Api\Data\DeletePayloadInterfaceFactory;
+use Opengento\BetterBo\Api\Data\DeleteResponseInterface;
+use Opengento\BetterBo\Api\Data\DeleteResponseInterfaceFactory;
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterfaceFactory;
-use Opengento\BetterBo\Api\Data\SavePayloadInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadInterface;
+use Opengento\BetterBo\Api\Data\SavePayloadInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
 use Opengento\BetterBo\Api\Data\SaveResponseInterface;
 use Opengento\BetterBo\Api\Data\SaveResponseInterfaceFactory;
 use Opengento\BetterBo\Api\GetProductAttributesInterface;
 use Opengento\BetterBo\Api\ProductManagementInterface;
 use Opengento\BetterBo\Model\Exception\PayloadValidationException;
-use function array_column;
+use Opengento\BetterBo\Model\Service\DeleteProductAttribute;
+use Opengento\BetterBo\Model\Service\SaveProductAttributes;
 
 class ProductManagement implements ProductManagementInterface
 {
@@ -31,12 +36,15 @@ class ProductManagement implements ProductManagementInterface
     public const TYPE_ERROR = 'error';
 
     public function __construct(
-        protected GetPayloadInterfaceFactory    $getPayloadFactory,
-        protected SavePayloadInterfaceFactory   $savePayloadInterfaceFactory,
-        protected SerializerInterface           $serializer,
-        protected GetProductAttributesInterface $getProductAttributes,
-        protected SaveProductAttributes $saveProductAttributes,
-        protected SaveResponseInterfaceFactory $saveResponseInterfaceFactory
+        protected GetPayloadInterfaceFactory     $getPayloadFactory,
+        protected SavePayloadInterfaceFactory    $savePayloadInterfaceFactory,
+        protected SerializerInterface            $serializer,
+        protected GetProductAttributesInterface  $getProductAttributes,
+        protected SaveProductAttributes          $saveProductAttributes,
+        protected SaveResponseInterfaceFactory   $saveResponseInterfaceFactory,
+        protected DeleteResponseInterfaceFactory $deleteResponseInterfaceFactory,
+        protected DeletePayloadInterfaceFactory $deletePayloadInterfaceFactory,
+        protected DeleteProductAttribute $deleteProductAttribute
     )
     {
     }
@@ -128,5 +136,29 @@ class ProductManagement implements ProductManagementInterface
         $payload->setAttributeCode($attributeCode);
 
         return $payload;
+    }
+
+    /**
+     * @throws PayloadValidationException
+     */
+    protected function initDeletePayload(string $entityId, string $attributeCode, string $storeViewId): DeletePayloadInterface
+    {
+        if (empty($entityId) || empty($attributeCode) || empty($storeViewId)) {
+            throw new PayloadValidationException(__('Invalid DeletePayload'));
+        }
+
+        /** @var \Opengento\BetterBo\Api\Data\DeletePayloadInterface $payload */
+        $payload = $this->deletePayloadInterfaceFactory->create();
+        $payload->setEntityId((int)$entityId);
+        $payload->setStoreViewId((int)$storeViewId);
+        $payload->setAttributeCode($attributeCode);
+
+        return $payload;
+    }
+
+    public function deleteProductData(string $entityId, string $attributeCode, string $storeViewId): DeleteResponseInterface
+    {
+        $payload = $this->initDeletePayload($entityId, $attributeCode, $storeViewId);
+        return $this->deleteProductAttribute->execute($payload);
     }
 }
