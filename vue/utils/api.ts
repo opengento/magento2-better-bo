@@ -68,7 +68,6 @@ export const _message = (data: any) => {
  * @param error 
  */
 export const _catch = (error: any) => {
-    // console.log(error)
     _message({
         status: 'error',
         message: error.message

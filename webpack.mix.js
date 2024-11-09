@@ -22,7 +22,10 @@ mix.alias({
 /**
  * Mix SASS
  */
-mix.sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
+mix
+    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
+    .vue({ version: 3 })
+    .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
     .purgeCss({
         extend: {
             content: [
@@ -31,23 +34,37 @@ mix.sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
                 './**/*.html',
                 './**/*.phtml',
                 './**/*.php',
+                './**/*.vue',
+                './**/*.ts',
+                './node_modules/element-plus/**/*.js',
             ],
-            // defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
+            skippedContentGlobs: [
+                '**/element-plus/**/*.css'
+            ],
             defaultExtractor: (content) => content.match(/[A-z0-9-:%+<>.!?\/]+/g) || [],
             safelist: { 
-                standard: [],
-            deep: []},
+                standard: [
+                    /^el-/,
+                    /^is-/,
+                    /^user-select/,
+                    /^popper/,
+                    /^fade-in/,
+                    /^zoom-in/,
+                    /^slide/,
+                ],
+                deep: [/^el-/],
+                greedy: [/^el-/]
+            },
             variables: false,
             fontFace: false
-        },
-        // enabled: true
+        }
     });
 
 
-/**
- * Mix TypeScript and Vue
- */
-mix
-    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
-    .vue({ version: 3 })
-    // .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
+// /**
+//  * Mix TypeScript and Vue
+//  */
+// mix
+//     // .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
+//     .vue({ version: 3 })
+//     // .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')

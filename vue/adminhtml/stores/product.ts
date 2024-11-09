@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios'
-import { _apiResult, _message } from '@/vue/utils/api'
+import { _apiResult, _message, _ttl } from '@/vue/utils/api'
 
 /**
  * Category store
@@ -8,11 +8,14 @@ import { _apiResult, _message } from '@/vue/utils/api'
 export const useProduct = defineStore('product', {
     state: () => {
         return {
-            loading: true as boolean,
             values: [] as any,
             originalValues: [] as any,
-            savedValues: [] as any,
+            successValues: [] as any,
+            errorValues: [] as any,
             config: null as any,
+
+            loading: true as boolean,
+            errorLoading: false as boolean,
         }
     },
     getters: {
@@ -42,12 +45,19 @@ export const useProduct = defineStore('product', {
         getAttributes(entityId: number, attributeCode: string) {
             this.loading = true
             _apiResult(
-                axios.post(`/rest/V1/betterbo/catalog/product/attributes`, {
-                    entityId,
-                    attributeCode
+                axios({
+                    url: `/rest/V1/betterbo/catalog/product/attributes`,   
+                    method: 'POST',
+                    data: {
+                        entityId,
+                        attributeCode,
+                    },
+                    // cache: {
+                    //     ttl: _ttl(),
+                    //     interpretHeader: false,
+                    // }
                 })
             ).then((data: any) => {
-                // console.log(data)
                 this.values = data?.data?.values
                 this.originalValues = JSON.parse(JSON.stringify(data?.data?.values))
                 this.config = data?.data?.config
@@ -74,13 +84,49 @@ export const useProduct = defineStore('product', {
             this.loading = true
 
             return _apiResult(
-                axios.post(`/rest/V1/betterbo/catalog/product/attributes/save`, {
-                    entityId,
-                    attributeCode,
-                    values: this._differentValues
+                axios({
+                    url: `/rest/V1/betterbo/catalog/product/attributes/save`,   
+                    method: 'POST',
+                    data: {
+                        entityId,
+                        attributeCode,
+                        values: this._differentValues
+                    },
+                    // cache: {
+                    //     ttl: _ttl(),
+                    //     interpretHeader: false,
+                    // }
                 })
             ).then((data: any) => {
+                console.log(data)
                 this.loading = false
+                this.successValues = JSON.parse(JSON.stringify(data.data.successValues))
+                this.errorValues = JSON.parse(JSON.stringify(data.data.errorValues))
+            })
+        },
+        /**
+         * Delete attribute
+         * 
+         * @param entityId 
+         * @param attributeCode 
+         * @param storeViewId 
+         */
+        deleteAttribute(entityId: number, attributeCode: string, storeViewId: number) {
+            this.errorLoading = true
+
+            _apiResult(
+                axios({
+                    url: `/rest/V1/betterbo/catalog/product/attributes/delete`,   
+                    method: 'POST',
+                    data: {
+                        entityId,
+                        attributeCode,
+                        storeViewId,
+                    },
+                })
+            ).then((data: any) => {
+                console.log(data)
+                this.errorLoading = false
             })
         }
     }
