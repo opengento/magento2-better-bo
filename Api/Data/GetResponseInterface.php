@@ -1,9 +1,6 @@
 <?php
 
-
 namespace Opengento\BetterBo\Api\Data;
-
-use Magento\Tests\NamingConvention\true\string;
 
 interface GetResponseInterface
 {
