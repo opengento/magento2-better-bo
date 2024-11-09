@@ -4,10 +4,6 @@
  * 
  * @see https://laravel-mix.com/docs/6.0
  * 
- * @version 1.0.0
- * @package Boeki\Vuetificator
- * 
- * @author <Alexandre Buleté> - bulete.alexandre@gmail.com
  */
 
 const mix = require('laravel-mix');
@@ -23,23 +19,18 @@ mix.alias({
     '$c'        : path.join(__dirname, 'vue/components')
 })
 
-
-require('laravel-mix-purgecss');
-
-mix.sass('adminhtml/web/scss/app.scss', 'adminhtml/web/css/')
+/**
+ * Mix SASS
+ */
+mix.sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
     .purgeCss({
         extend: {
             content: [
-                '../../../../../app/**/*.xml',
-                '../../../../../app/**/*.js',
-                '../../../../../app/**/*.html',
-                '../../../../../app/**/*.phtml',
-                '../../../../../app/**/*.php',
-                // '../../../../../vendor/magento/**/*.xml',
-                // '../../../../../vendor/magento/**/*.js',
-                // '../../../../../vendor/magento/**/*.html',
-                // '../../../../../vendor/magento/**/*.phtml',
-                // '../../../../../vendor/magento/**/*.php'
+                './**/*.xml',
+                './**/*.js',
+                './**/*.html',
+                './**/*.phtml',
+                './**/*.php',
             ],
             // defaultExtractor: (content) => content.match(/[\w-/.:]+(?<!:)/g) || [],
             defaultExtractor: (content) => content.match(/[A-z0-9-:%+<>.!?\/]+/g) || [],
@@ -54,9 +45,9 @@ mix.sass('adminhtml/web/scss/app.scss', 'adminhtml/web/css/')
 
 
 /**
- * Mix configuration example
+ * Mix TypeScript and Vue
  */
 mix
-    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product/attributes')
+    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
     .vue({ version: 3 })
-    .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
+    // .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
