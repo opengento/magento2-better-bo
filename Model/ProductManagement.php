@@ -15,6 +15,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterfaceFactory;
+use Opengento\BetterBo\Api\Data\GetResponseInterface;
+use Opengento\BetterBo\Api\Data\GetResponseInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadInterface;
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
@@ -35,8 +37,9 @@ class ProductManagement implements ProductManagementInterface
         protected SavePayloadInterfaceFactory   $savePayloadInterfaceFactory,
         protected SerializerInterface           $serializer,
         protected GetProductAttributesInterface $getProductAttributes,
-        protected SaveProductAttributes $saveProductAttributes,
-        protected SaveResponseInterfaceFactory $saveResponseInterfaceFactory
+        protected SaveProductAttributes         $saveProductAttributes,
+        protected SaveResponseInterfaceFactory  $saveResponseInterfaceFactory,
+        protected GetResponseInterfaceFactory   $getResponseInterfaceFactory
     )
     {
     }
@@ -71,27 +74,30 @@ class ProductManagement implements ProductManagementInterface
     /**
      * @param string $entityId
      * @param string $attributeCode
-     * @return string
+     * @return GetResponseInterface
      */
-    public function getProductData(string $entityId, string $attributeCode): string
+    public function getProductData(string $entityId, string $attributeCode): GetResponseInterface
     {
-        $result = [
-            'type' => self::TYPE_ERROR,
-            'message' => '',
-            'data' => []
-        ];
+        /** @var GetResponseInterface $result */
+        $result = $this->getResponseInterfaceFactory->create();
 
         try {
             $payload = $this->initGetPayload($entityId, $attributeCode);
-            $result['data'] = $this->getProductAttributes->execute($payload);
-            $result['type'] = self::TYPE_SUCCESS;
-        } catch (PayloadValidationException $e) {
-            $result['message'] = $e->getMessage();
-        } catch (NoSuchEntityException $e) {
-            $result['message'] = __('Unable to retrieve entity: %1', $e->getMessage());
-        }
 
-        return $this->serializer->serialize($result);
+            $data = $this->getProductAttributes->execute($payload);
+            $result->setData($data);
+            $result->setType(self::TYPE_SUCCESS);
+            $result->setMessage('');
+
+            return $result;
+        } catch (PayloadValidationException $e) {
+            $result->setMessage($e->getMessage());
+        } catch (NoSuchEntityException $e) {
+            $result->setMessage(__('Unable to retrieve entity; %1', $e->getMessage())->render());
+        }
+        $result->setType(self::TYPE_ERROR);
+
+        return $result;
     }
 
     /**

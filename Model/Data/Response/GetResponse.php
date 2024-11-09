@@ -9,15 +9,26 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model\Data\Get;
+namespace Opengento\BetterBo\Model\Data\Response;
 
 use Opengento\BetterBo\Api\Data\GetResponseInterface;
 
 class GetResponse implements GetResponseInterface
 {
+    /**
+     * @var string
+     */
     protected string $type;
+
+    /**
+     * @var string
+     */
     protected string $message;
-    protected array $data;
+
+    /**
+     * @var \Opengento\BetterBo\Api\Data\GetResponseDataInterface|null
+     */
+    protected ?\Opengento\BetterBo\Api\Data\GetResponseDataInterface $data;
 
     /**
      * @return string
@@ -54,18 +65,18 @@ class GetResponse implements GetResponseInterface
     }
 
     /**
-     * @return array
+     * @return \Opengento\BetterBo\Api\Data\GetResponseDataInterface
      */
-    public function getData(): array
+    public function getData(): \Opengento\BetterBo\Api\Data\GetResponseDataInterface
     {
         return $this->data;
     }
 
     /**
-     * @param array $data
+     * @param \Opengento\BetterBo\Api\Data\GetResponseDataInterface $data
      * @return void
      */
-    public function setData(array $data): void
+    public function setData(\Opengento\BetterBo\Api\Data\GetResponseDataInterface $data): void
     {
         $this->data = $data;
     }
