@@ -54,43 +54,23 @@ class ProductEavDataProviderPlugin
         }
 
         $attributeCode = $result['arguments']['data']['config']['code'];
-        $storeViews = $this->getStores();
         $product = $this->registry->registry('current_product');
 
-        $productId = $product->getId();
-        if ($product === null || $productId === null) {
+        if ($product === null || $product->getId() === null) {
             return $result;
         }
 
-        foreach ($storeViews as $storeView) {
-            $productByStoreCode = $this->getProductInStoreView($productId, $storeView->getId());
-            $currentScopeValueForCode = $value = $productByStoreCode->getData($attributeCode);
+        $adminStoreViewId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $currentStoreViewId = $this->storeManager->getStore()->getId();
 
-            if ($result['arguments']['data']['config']['dataType'] == 'select'
-                && !is_array($currentScopeValueForCode)
-            ) {
-                $value = $productByStoreCode->getResource()->getAttribute($attributeCode)->getSource()->getOptionText($currentScopeValueForCode);
-            }
-
-            $valueAsString = null;
-            try {
-                $valueAsString = (string) $value;
-            } catch (\Throwable $ex) {
-                $valueAsString = json_encode($value);
-                if ($valueAsString === false) {
-                    $valueAsString = null;
-                }
-            }
-
-            if (true) { // edit 
-                $result['arguments']['data']['config']['storebtn'] = "<button class='btn-store-view' data-attribute-code='{$attributeCode}'>" . __('See store values') . "</button>";
-            }
+        if ((int) $currentStoreViewId === (int) $adminStoreViewId) {
+            $result['arguments']['data']['config']['storebtn'] = "<button class='btn-store-view' data-attribute-code='{$attributeCode}'>" . __('See store values') . "</button>";
         }
 
         return $result;
     }
 
-    /**
+    /*
      * @param int $productId
      * @param int $storeViewId
      * @return mixed
