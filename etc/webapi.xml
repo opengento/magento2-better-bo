@@ -20,7 +20,7 @@
     <route url="/V1/betterbo/catalog/product/attributes/save" method="POST">
         <service class="Opengento\BetterBo\Api\ProductManagementInterface" method="saveProductData"/>
         <resources>
-            <resource ref="anonymous" />
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
 </routes>
