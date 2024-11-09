@@ -17,17 +17,30 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
 use Opengento\BetterBo\Api\GetProductAttributesInterface;
 
 class GetProductAttributes implements GetProductAttributesInterface
 {
+    /**
+     * @var StoreInterface[]
+     */
+    protected array $stores = [];
+    /**
+     * @var GroupInterface[]
+     */
+    protected array $storeGroups = [];
+
     public function __construct(
-        protected AttributeRepositoryInterface $attributeRepository,
+        protected GroupRepositoryInterface                                       $groupRepository,
+        protected AttributeRepositoryInterface                                   $attributeRepository,
         protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        protected StoreManagerInterface $storeManager,
-        protected ProductRepositoryInterface $productRepository
+        protected StoreManagerInterface                                          $storeManager,
+        protected ProductRepositoryInterface                                     $productRepository,
     )
     {
     }
@@ -61,9 +74,9 @@ class GetProductAttributes implements GetProductAttributesInterface
         return [
             'type' => $attribute->getFrontendInput(),
             'options' => array_map(
-                static fn (AttributeOptionInterface $option) => [
+                static fn(AttributeOptionInterface $option) => [
                     'label' => $option->getLabel(),
-                    'value' => $option->getValue()
+                    'value' => (string)$option->getValue()
                 ],
                 $attribute->getOptions()
             ),
@@ -78,17 +91,48 @@ class GetProductAttributes implements GetProductAttributesInterface
      */
     protected function getAttributeValues(GetPayloadInterface $payload): array
     {
-        $stores = $this->storeManager->getStores();
+        $stores = $this->getStores();
         $results = [];
+
         foreach ($stores as $storeView) {
             $product = $this->productRepository->getById($payload->getEntityId(), storeId: $storeView->getId());
             $results[] = [
                 'storeViewId' => $storeView->getId(),
-                'storeViewLabel' => $storeView->getName(),
+                'storeViewLabel' => $this->buildStoreViewLabel($storeView),
                 'value' => $product->getData($payload->getAttributeCode())
             ];
         }
 
+        $this->sortResults($results);
         return $results;
+    }
+
+    protected function getStores(): array
+    {
+        if (!$this->stores) {
+            $this->stores = $this->storeManager->getStores();
+        }
+        return $this->stores;
+    }
+
+    protected function buildStoreViewLabel(StoreInterface $store): string
+    {
+        $group = $this->getStoreGroups()[$store->getStoreGroupId()];
+        return sprintf('%s / %s', $group->getName(), $store->getName());
+    }
+
+    protected function getStoreGroups(): array
+    {
+        if (!$this->storeGroups) {
+            $this->storeGroups = $this->groupRepository->getList();
+        }
+        return $this->storeGroups;
+    }
+
+    protected function sortResults(array &$results): void
+    {
+        usort($results, function ($a, $b) {
+            return strcmp($a['storeViewLabel'], $b['storeViewLabel']);
+        });
     }
 }
