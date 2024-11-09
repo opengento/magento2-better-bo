@@ -18,6 +18,8 @@ use Opengento\BetterBo\Api\Data\GetPayloadInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadInterfaceFactory;
 use Opengento\BetterBo\Api\Data\SavePayloadInterface;
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
+use Opengento\BetterBo\Api\Data\SaveResponseInterface;
+use Opengento\BetterBo\Api\Data\SaveResponseInterfaceFactory;
 use Opengento\BetterBo\Api\GetProductAttributesInterface;
 use Opengento\BetterBo\Api\ProductManagementInterface;
 use Opengento\BetterBo\Model\Exception\PayloadValidationException;
@@ -33,7 +35,8 @@ class ProductManagement implements ProductManagementInterface
         protected SavePayloadInterfaceFactory   $savePayloadInterfaceFactory,
         protected SerializerInterface           $serializer,
         protected GetProductAttributesInterface $getProductAttributes,
-        protected SaveProductAttributes $saveProductAttributes
+        protected SaveProductAttributes $saveProductAttributes,
+        protected SaveResponseInterfaceFactory $saveResponseInterfaceFactory
     )
     {
     }
@@ -42,30 +45,27 @@ class ProductManagement implements ProductManagementInterface
      * @param string $entityId
      * @param string $attributeCode
      * @param SavePayloadValueInterface[] $values
-     * @return string
-     * @throws Exception\SaveException
+     * @return SaveResponseInterface
      */
-    public function saveProductData(string $entityId, string $attributeCode, array $values): string
+    public function saveProductData(string $entityId, string $attributeCode, array $values): SaveResponseInterface
     {
-        $result = [
-            'type' => self::TYPE_ERROR,
-            'message' => '',
-            'data' => []
-        ];
+        $result = $this->saveResponseInterfaceFactory->create();
 
         try {
             $payload = $this->initSavePayload($entityId, $attributeCode, $values);
-
-            $this->saveProductAttributes->execute(
+            $response = $this->saveProductAttributes->execute(
                 $payload
             );
 
-            $result['type'] = self::TYPE_SUCCESS;
+            $result->setType(self::TYPE_SUCCESS);
+            $result->setData($response);
+            $result->setMessage('');
         } catch (PayloadValidationException $e) {
-            $result['message'] = $e->getMessage();
+            $result->setType(self::TYPE_ERROR);
+            $result->setMessage($e->getMessage());
         }
 
-        return $this->serializer->serialize($result);
+        return $result;
     }
 
     /**

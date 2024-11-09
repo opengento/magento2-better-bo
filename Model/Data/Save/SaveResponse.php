@@ -1,7 +1,7 @@
 <?php
 
 /**
- * GetResponse
+ * SaveResponse
  *
  * @copyright Copyright © 2024 Blackbird Agency. All rights reserved.
  * @author    sebastien@bird.eu
@@ -9,15 +9,26 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model\Data;
+namespace Opengento\BetterBo\Model\Data\Save;
 
-use Opengento\BetterBo\Api\Data\GetResponseInterface;
+use Opengento\BetterBo\Api\Data\SaveResponseInterface;
 
-class GetResponse implements GetResponseInterface
+class SaveResponse implements SaveResponseInterface
 {
+    /**
+     * @var string
+     */
     protected string $type;
+
+    /**
+     * @var string
+     */
     protected string $message;
-    protected array $data;
+
+    /**
+     * @var \Opengento\BetterBo\Api\Data\SaveResponseValueInterface|null
+     */
+    protected ?\Opengento\BetterBo\Api\Data\SaveResponseValueInterface $data;
 
     /**
      * @return string
@@ -54,18 +65,18 @@ class GetResponse implements GetResponseInterface
     }
 
     /**
-     * @return array
+     * @return \Opengento\BetterBo\Api\Data\SaveResponseValueInterface|null
      */
-    public function getData(): array
+    public function getData(): ?\Opengento\BetterBo\Api\Data\SaveResponseValueInterface
     {
         return $this->data;
     }
 
     /**
-     * @param array $data
+     * @param \Opengento\BetterBo\Api\Data\SaveResponseValueInterface $data
      * @return void
      */
-    public function setData(array $data): void
+    public function setData(\Opengento\BetterBo\Api\Data\SaveResponseValueInterface $data): void
     {
         $this->data = $data;
     }

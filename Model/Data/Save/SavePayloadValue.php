@@ -9,14 +9,20 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model\Data;
+namespace Opengento\BetterBo\Model\Data\Save;
 
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
 
 class SavePayloadValue implements SavePayloadValueInterface
 {
+    /**
+     * @var string
+     */
     protected string $value;
 
+    /**
+     * @var string
+     */
     protected string $storeViewId;
 
     /**
@@ -43,6 +49,10 @@ class SavePayloadValue implements SavePayloadValueInterface
         return $this->value;
     }
 
+    /**
+     * @param string $value
+     * @return void
+     */
     public function setValue(string $value): void
     {
         $this->value = $value;

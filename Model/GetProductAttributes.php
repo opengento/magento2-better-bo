@@ -73,6 +73,7 @@ class GetProductAttributes implements GetProductAttributesInterface
 
         return [
             'type' => $attribute->getFrontendInput(),
+            'frontendLabel' => $attribute->getDefaultFrontendLabel(),
             'options' => array_map(
                 static fn(AttributeOptionInterface $option) => [
                     'label' => $option->getLabel(),
