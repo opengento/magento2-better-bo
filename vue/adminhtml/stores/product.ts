@@ -10,8 +10,8 @@ export const useProduct = defineStore('product', {
         return {
             loading: true as boolean,
             product: null as any,
-            attribute: null as any
-            // attributes: [] as any,
+            values: [] as any,
+            config: null as any,
         }
     },
     getters: {
@@ -34,19 +34,26 @@ export const useProduct = defineStore('product', {
                 })
             ).then((data: any) => {
                 console.log(data)
-                this.attribute = data?.attribute
+                this.values = data?.data?.values
+                this.config = data?.data?.config
                 this.loading = false
             }).catch((error: any) => {
                 console.log(error)
             })
         },
-        postAttributes(entityId: any, storeId: number, attributeCode: string, value: any) {
+        /**
+         * Post the attributes
+         * 
+         * @param entityId 
+         * @param attributeCode 
+         * @param values 
+         */
+        postAttributes(entityId: any, attributeCode: string, values: any) {
             _apiResult(
                 axios.post(`/rest/V1/betterbo/catalog/product/attributes`, {
                     entityId,
-                    storeId,
                     attributeCode,
-                    value
+                    values
                 })
             ).then((data: any) => {
                 console.log(data)

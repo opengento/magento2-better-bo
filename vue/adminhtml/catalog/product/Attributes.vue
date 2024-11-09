@@ -9,32 +9,47 @@
         :lock-scroll="true" 
     >
         <template #default>
+            <!-- {{ productStore.values }}
+            {{ productStore.config }} -->
             <el-form 
                 label-position="top"
                 ref="form"
             >
-                <div v-for="attribute in attributes" :key="attribute.attribute_code">
+                <div v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId">
                     <!-- {{ attribute }} -->
-                    <div>
-                        <el-text>
-                            {{ attribute.store?.name }}
-                        </el-text>
-                    </div>
-                    <el-form-item v-if="attribute" :label="attribute.store_view_id">
+                    <el-form-item :label="attribute.storeViewLabel">
                         <!-- {{ attribute.value }} -->
-                        <el-input v-if="config.type === 'string'" v-model="attribute.value" />
-                        <el-select 
-                            v-else-if="config.type === 'select' && config.options" 
+                        <el-input 
+                            v-if="productStore.config?.type === 'text'" 
                             v-model="attribute.value"
-                            multiple
+                        />
+                        <!-- <el-select 
+                            v-else-if="productStore.config?.type === 'select' && productStore.config?.options" 
+                            v-model="attribute.value"
+                            value-key="value"
+                            filterable
                         >
                             <el-option
-                                v-for="item in config.options"
+                                v-for="item in productStore.config?.options"
                                 :key="item.value"
                                 :label="item.label"
                                 :value="item.value"
                             />
-                        </el-select>
+                        </el-select> -->
+                        <select 
+                            class="el-select"
+                            v-else-if="productStore.config?.type === 'select' && productStore.config?.options" 
+                            @change="attribute.value = $event.target.value"
+                        >
+                            <option
+                                v-for="item in productStore.config?.options"
+                                :key="item.value"
+                                :value="item.value"
+                                :selected="item.value === attribute.value"
+                            >
+                                {{ item.label }}
+                            </option>
+                        </select>
                     </el-form-item>
                 </div>
             </el-form>
@@ -67,7 +82,7 @@
     /**
      * Environment
      */
-    const env = 'test'; // 'test' | 'prod'
+    // const env = ref<'test' | 'prod'>('prod');
 
     /**
      * Set data
@@ -88,7 +103,8 @@
         if (target.dataset.attributeCode !== undefined && drawer.value === false) {
             console.log('ping')
             attributeCode.value = target.dataset.attributeCode;
-            (env === 'test') ? _test() : _get()
+            // (env === 'test') ? _test() : _get()
+            _get()
             drawer.value = true;
         }
     };
@@ -98,20 +114,20 @@
      */
     const _get = () => {
         productStore.getAttributes(props.productId, attributeCode.value)
-            .then(() => {
-                // console.log(productStore.attributes);
-                // attributes.value = productStore.attributes;
-            });
+        form.value = productStore.values.reduce((acc: any, value: any) => {
+            acc[value.storeViewId] = value.value;
+            return acc;
+        }, {});
     }
 
     /**
      * Post attributes
      */
     const _post = () => {
-        productStore.postAttributes(props.productId, attributeCode.value, attributes.value)
-            .then(() => {
-                drawer.value = false;
-            });
+        // productStore.postAttributes(props.productId, attributeCode.value, attributes.value)
+        //     .then(() => {
+        //         drawer.value = false;
+        //     });
     }
 
     /**
@@ -142,3 +158,17 @@
     }
 
 </script>
+
+<style lang="scss">
+    .el-select {
+        width: 100%;
+        height: 40px;
+        border: 1px solid lightgrey;
+        border-radius: 5px;
+        padding: 0 10px;
+        &:focus {
+            border-color: #409EFF;
+            outline: 0;
+        }
+    }
+</style>
