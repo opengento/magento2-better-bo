@@ -26,6 +26,7 @@ export const useProduct = defineStore('product', {
          */
         _differentValues(state: any) {
             return state.values.filter((currentValue: any) => {
+                console.log(currentValue)
                 const originalValue = state.originalValues.find((original: any) => original.storeViewId === currentValue.storeViewId);
                 return originalValue?.value !== currentValue.value;
             }).map((value: any) => ({

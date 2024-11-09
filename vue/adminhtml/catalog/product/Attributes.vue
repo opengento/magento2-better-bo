@@ -56,6 +56,21 @@
                                 :init="_editorInit"
                             />
                         </div>
+                        <select 
+                            v-else-if="productStore.config?.type === 'multiselect' && productStore.config?.options"
+                            class="el-select input-with-trash"
+                            @change="attribute.value = Array.from($event.target.selectedOptions).map((option: any) => option.value).join(',')"
+                            multiple
+                            >
+                            <option
+                                v-for="item in productStore.config?.options"
+                                :key="item.value"
+                                :value="item.value"
+                                :selected="attribute.value?.split(',').includes(item.value)"
+                            >
+                                {{ item.label }}
+                            </option>
+                        </select>
                         <el-popconfirm title="Are you sure to delete this?">
                             <template #reference>
                                 <span class="trash-icon">
@@ -192,6 +207,12 @@
         background-color: var(--el-input-bg-color,var(--el-fill-color-blank));
         border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
         padding: 0 10px;
+        &[multiple] {
+            height: auto;
+            option {
+                padding: 3px;
+            }
+        }
         height: 32px;
         &:focus {
             border-color: var(--el-color-primary);

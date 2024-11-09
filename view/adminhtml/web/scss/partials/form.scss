@@ -2,12 +2,12 @@
 
 div.admin__field-control {
     &._with-store_btn {
-        input,select {
+        input:not(._has-datepicker),select:not(._has-datepicker),textarea {
             width: calc(100% - 59px);
         }
     }
     &._with-store_btn._with-tooltip {
-        input,select {
+        input:not(._has-datepicker),select:not(._has-datepicker),textarea {
             width: calc(100% - 89px);
         }
     }
