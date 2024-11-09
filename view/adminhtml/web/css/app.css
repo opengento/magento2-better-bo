@@ -1,1 +1,34 @@
-div.admin__field-control._with-store_btn input,div.admin__field-control._with-store_btn select{width:calc(100% - 59px)}div.admin__field-control._with-store_btn._with-tooltip input,div.admin__field-control._with-store_btn._with-tooltip select{width:calc(100% - 89px)}div.admin__field-control div.store-view-container{display:inline-block;padding-left:20px}div.admin__field-control div.store-view-container .btn-store-view{align-items:center;background-color:#000;border-radius:50%;cursor:pointer;display:inline-block;display:flex;height:35px;justify-content:center;padding:10px;width:35px}div.admin__field-control div.store-view-container .btn-store-view:hover{background-color:#fff;border-color:#000}div.admin__field-control div.store-view-container .btn-store-view:hover svg{color:#000}div.admin__field-control div.store-view-container .btn-store-view svg{color:#fff;height:100%;width:100%}
+div.admin__field-control._with-store_btn input:not(._has-datepicker), div.admin__field-control._with-store_btn select:not(._has-datepicker), div.admin__field-control._with-store_btn textarea {
+  width: calc(100% - 59px);
+}
+div.admin__field-control._with-store_btn._with-tooltip input:not(._has-datepicker), div.admin__field-control._with-store_btn._with-tooltip select:not(._has-datepicker), div.admin__field-control._with-store_btn._with-tooltip textarea {
+  width: calc(100% - 89px);
+}
+div.admin__field-control div.store-view-container {
+  display: inline-block;
+  padding-left: 20px;
+}
+div.admin__field-control div.store-view-container .btn-store-view {
+  background-color: #000000;
+  padding: 10px;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div.admin__field-control div.store-view-container .btn-store-view:hover {
+  background-color: #ffffff;
+  border-color: #000000;
+}
+div.admin__field-control div.store-view-container .btn-store-view:hover svg {
+  color: #000000;
+}
+div.admin__field-control div.store-view-container .btn-store-view svg {
+  color: #ffffff;
+  width: 100%;
+  height: 100%;
+}
