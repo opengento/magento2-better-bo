@@ -87,8 +87,10 @@
      */
     const handleClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        if (target.dataset.attributeCode !== undefined && drawer.value === false) {
-            attributeCode.value = target.dataset.attributeCode;
+        const parentWithAttribute = target.closest('[data-attribute-code]');
+        
+        if (parentWithAttribute && drawer.value === false) {
+            attributeCode.value = parentWithAttribute.getAttribute('data-attribute-code');
             _get()
             drawer.value = true;
         }
