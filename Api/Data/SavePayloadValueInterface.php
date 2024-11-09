@@ -9,7 +9,7 @@ interface SavePayloadValueInterface
      * @param string $storeId
      * @return void
      */
-    public function setStoreViewId(string $storeId): void;
+    public function setStoreViewId(string $storeViewId): void;
 
     /**
      * @return string

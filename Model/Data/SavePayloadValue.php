@@ -24,7 +24,7 @@ class SavePayloadValue implements SavePayloadValueInterface
      */
     public function setStoreViewId(string $storeViewId): void
     {
-        $this->storeId = $storeViewId;
+        $this->storeViewId = $storeViewId;
     }
 
     /**
