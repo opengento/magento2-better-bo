@@ -65,7 +65,10 @@ class ProductEavDataProviderPlugin
         $adminStoreViewId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
         $currentStoreViewId = $this->storeManager->getStore()->getId();
 
-        if ((int) $currentStoreViewId === (int) $adminStoreViewId) {
+        if ($result['arguments']['data']['config']['globalScope']) {
+            return $result;
+        }
+        if ((int) $currentStoreViewId === (int) $adminStoreViewId &&  $result['arguments']['data']['config']['globalScope'] == false) {
             $result['arguments']['data']['config']['storebtn'] = '<button class=\'btn-store-view\' data-attribute-code=\'' . $attributeCode . '\'>' . $storeSvg . '</button>';
         }
 

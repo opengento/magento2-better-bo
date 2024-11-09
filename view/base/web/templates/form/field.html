@@ -14,7 +14,7 @@
         </label>
     </div>
     <div class="admin__field-control"
-         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
+         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault, '_with-store_btn': $data.storebtn">
         <render args="elementTmpl" ifnot="hasAddons()"></render>
 
         <div class="admin__control-addon" if="hasAddons()">
