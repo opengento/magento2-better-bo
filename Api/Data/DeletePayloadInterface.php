@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Opengento\BetterBo\Api\Data;
 
 interface DeletePayloadInterface
@@ -37,5 +36,4 @@ interface DeletePayloadInterface
      * @return mixed
      */
     public function setAttributeCode(string $attributeCode);
-
 }

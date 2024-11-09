@@ -1,9 +1,7 @@
 <?php
 
-
 namespace Opengento\BetterBo\Api;
 
-use Opengento\BetterBo\Api\Data\DeleteResponseInterface;
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
 use Opengento\BetterBo\Api\Data\SaveResponseInterface;
 

@@ -45,8 +45,7 @@ class ProductManagement implements ProductManagementInterface
         protected DeleteResponseInterfaceFactory $deleteResponseInterfaceFactory,
         protected DeletePayloadInterfaceFactory $deletePayloadInterfaceFactory,
         protected DeleteProductAttribute $deleteProductAttribute
-    )
-    {
+    ) {
     }
 
     /**
@@ -86,7 +85,7 @@ class ProductManagement implements ProductManagementInterface
         $result = [
             'type' => self::TYPE_ERROR,
             'message' => '',
-            'data' => []
+            'data' => [],
         ];
 
         try {

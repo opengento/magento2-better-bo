@@ -1,4 +1,5 @@
 <?php
+
 namespace Opengento\BetterBo\Plugin;
 
 use Magento\Config\Model\Config\Structure\Element\Field as Subject;
@@ -6,10 +7,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Phrase;
-use Magento\Store\Api\WebsiteRepositoryInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 
 class ConfigFieldPlugin
@@ -136,14 +137,14 @@ class ConfigFieldPlugin
     //         $currentValue = $this->scopeConfig->getValue($path);
     //     }
     //     $scopeValue = $this->scopeConfig->getValue($path, $scopeType, $scope->getId());
-        
+
     //     if (is_array($currentValue) || is_array($scopeValue)) {
     //         return $scopeLine;
     //     }
-        
+
     //     $currentValue = (string) $currentValue;
     //     $scopeValue = (string) $scopeValue;
-        
+
     //     // dd($currentValue, $scopeValue);
     //     if ($scopeValue != $currentValue) {
     //         $scopeValue = $this->escaper->escapeHtml($scopeValue);

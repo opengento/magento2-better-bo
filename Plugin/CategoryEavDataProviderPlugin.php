@@ -40,7 +40,7 @@ class CategoryEavDataProviderPlugin
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 // if (isset($result[$fieldSet]['children'][$field]['arguments']['data']['config']) && (int) $currentStoreViewId === (int) $adminStoreViewId) {
-                    $result[$fieldSet]['children'][$field]['arguments']['data']['config']['storebtn'] = "<button class='btn-store-view'>" . __('See store values') . "</button>";
+                $result[$fieldSet]['children'][$field]['arguments']['data']['config']['storebtn'] = "<button class='btn-store-view'>" . __('See store values') . "</button>";
                 // }
             }
         }

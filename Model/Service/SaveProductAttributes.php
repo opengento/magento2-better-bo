@@ -21,8 +21,7 @@ class SaveProductAttributes
     public function __construct(
         protected Action $productAction,
         protected SaveResponseValueInterfaceFactory $saveResponseValueFactory
-    )
-    {
+    ) {
     }
 
     /**
@@ -37,7 +36,7 @@ class SaveProductAttributes
             $payload->getValues(),
             static function ($r, SavePayloadValueInterface $value) use ($payload) {
                 $r[$value->getStoreViewId()] = [
-                    $payload->getAttributeCode() => $value->getValue()
+                    $payload->getAttributeCode() => $value->getValue(),
                 ];
                 return $r;
             },

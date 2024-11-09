@@ -41,8 +41,7 @@ class GetProductAttributes implements GetProductAttributesInterface
         protected CollectionFactory $productCollectionFactory,
         protected StoreManagerInterface                                          $storeManager,
         protected ProductRepositoryInterface                                     $productRepository,
-    )
-    {
+    ) {
     }
 
     /**
@@ -53,7 +52,7 @@ class GetProductAttributes implements GetProductAttributesInterface
     {
         return [
             'config' => $this->getAttributeConfig($payload->getAttributeCode()),
-            'values' => $this->getAttributeValues($payload)
+            'values' => $this->getAttributeValues($payload),
         ];
     }
 
@@ -75,15 +74,14 @@ class GetProductAttributes implements GetProductAttributesInterface
             'type' => $attribute->getFrontendInput(),
             'frontendLabel' => $attribute->getDefaultFrontendLabel(),
             'options' => array_map(
-                static fn(AttributeOptionInterface $option) => [
+                static fn (AttributeOptionInterface $option) => [
                     'label' => $option->getLabel(),
-                    'value' => (string)$option->getValue()
+                    'value' => (string)$option->getValue(),
                 ],
                 $attribute->getOptions()
             ),
         ];
     }
-
 
     /**
      * @param GetPayloadInterface $payload
@@ -100,7 +98,7 @@ class GetProductAttributes implements GetProductAttributesInterface
             $results[] = [
                 'storeViewId' => $storeView->getId(),
                 'storeViewLabel' => $this->buildStoreViewLabel($storeView),
-                'value' => $product->getData($payload->getAttributeCode())
+                'value' => $product->getData($payload->getAttributeCode()),
             ];
         }
 
@@ -132,8 +130,6 @@ class GetProductAttributes implements GetProductAttributesInterface
 
     protected function sortResults(array &$results): void
     {
-        usort($results, function ($a, $b) {
-            return strcmp($a['storeViewLabel'], $b['storeViewLabel']);
-        });
+        usort($results, fn ($a, $b) => strcmp($a['storeViewLabel'], $b['storeViewLabel']));
     }
 }

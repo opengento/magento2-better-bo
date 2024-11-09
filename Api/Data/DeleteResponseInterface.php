@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Opengento\BetterBo\Api\Data;
-
 
 interface DeleteResponseInterface
 {

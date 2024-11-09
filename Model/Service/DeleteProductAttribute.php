@@ -21,8 +21,7 @@ class DeleteProductAttribute
     public function __construct(
         protected Action                                                      $productAction,
         protected DeleteResponseInterfaceFactory $deleteResponseValueFactory
-    )
-    {
+    ) {
     }
 
     /**
