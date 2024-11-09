@@ -13,7 +13,6 @@ namespace Opengento\BetterBo\Model;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
@@ -21,8 +20,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
 use Opengento\BetterBo\Api\GetProductAttributesInterface;
-use PDepend\Util\Type;
-use function array_map;
 
 class GetProductAttributes implements GetProductAttributesInterface
 {
