@@ -76,7 +76,7 @@ class GetProductAttributes implements GetProductAttributesInterface
             'options' => array_map(
                 static fn(AttributeOptionInterface $option) => [
                     'label' => $option->getLabel(),
-                    'value' => $option->getValue()
+                    'value' => (string)$option->getValue()
                 ],
                 $attribute->getOptions()
             ),
