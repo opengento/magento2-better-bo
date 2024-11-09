@@ -87,6 +87,7 @@ class GetProductAttributes implements GetProductAttributesInterface
             $product = $this->productRepository->getById($payload->getEntityId(), storeId: $storeView->getId());
             $results[] = [
                 'storeViewId' => $storeView->getId(),
+                'storeViewLabel' => $storeView->getName(),
                 'value' => $product->getData($payload->getAttributeCode())
             ];
         }
