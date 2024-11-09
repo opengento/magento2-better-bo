@@ -1,9 +1,10 @@
 <?php 
 
-    // dd($this);
+    $productId = $block->getRequest()->getParam('id');
 
 ?>
 
-<div>
-    <p>OK</p>
-</div>
+<div 
+    id="product_attributes"
+    data-product-id="<?= $productId ?>"
+></div>

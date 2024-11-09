@@ -1,15 +1,15 @@
 import { defineStore } from "pinia";
 import axios from 'axios'
-import { _apiResult } from '@boeki/vui/utils/toolBox'
+import { _apiResult } from '@/vue/utils/api'
 
 /**
  * Category store
  */
-export const useCart = defineStore('cart', {
+export const useProduct = defineStore('product', {
     state: () => {
         return {
             loading: true as boolean,
-            product: true as boolean,
+            product: null as any,
             attribute: null as any
             // attributes: [] as any,
         }
@@ -25,7 +25,8 @@ export const useCart = defineStore('cart', {
          * 
          * @returns 
          */
-        get(storeId: number) {
+        getAttributes(entityId: number, attributeCode: string) {
+            this.loading = true
             _apiResult(
                 axios.post(`/rest/V1/betterbo/catalog/product/attributes`, {
                     entityId,
@@ -33,13 +34,13 @@ export const useCart = defineStore('cart', {
                 })
             ).then((data: any) => {
                 console.log(data)
-                this.attribute = data.attribute
+                this.attribute = data?.attribute
                 this.loading = false
             }).catch((error: any) => {
                 console.log(error)
             })
         },
-        put(attribute: any) {
+        postAttributes(entityId: any, storeId: number, attributeCode: string, value: any) {
             _apiResult(
                 axios.post(`/rest/V1/betterbo/catalog/product/attributes`, {
                     entityId,

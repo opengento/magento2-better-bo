@@ -28,5 +28,5 @@ mix.alias({
  * Mix configuration example
  */
 mix
-    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product/attributes')
+    .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
     .vue({ version: 3 })
