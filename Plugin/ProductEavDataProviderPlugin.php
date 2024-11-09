@@ -20,15 +20,6 @@ use Magento\Store\Model\Store;
  */
 class ProductEavDataProviderPlugin
 {
-    /** @var StoreManagerInterface */
-    private $storeManager;
-
-    /** @var Registry */
-    private $registry;
-
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
-
     /**
      * ProductEavDataProviderPlugin constructor.
      *
