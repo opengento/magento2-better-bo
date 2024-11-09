@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Config\Model\Config\Structure\Element\Field">
         <plugin name="opengento_betterbo_plugin_add_tooltip_to_product_field"
                 type="Opengento\BetterBo\Plugin\ConfigFieldPlugin"
@@ -9,9 +8,10 @@
     </type>
 
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav">
-        <plugin name="opengento_betterbo_plugin_field"
-                type="Opengento\BetterBo\Plugin\ProductEavDataProviderPlugin"
-                sortOrder="1"
-                disabled="false" />
+        <plugin name="opengento_betterbo_plugin_product_field" type="Opengento\BetterBo\Plugin\ProductEavDataProviderPlugin" sortOrder="1" disabled="false" />
     </type>
+
+    <!-- <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="opengento_betterbo_plugin_category_field" type="Opengento\BetterBo\Plugin\CategoryEavDataProviderPlugin" sortOrder="1" disabled="false" />
+    </type> -->
 </config>
