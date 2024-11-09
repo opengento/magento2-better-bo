@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="opengento" translate="label" sortOrder="10">
+            <label>Opengento</label>
+        </tab>
+        <section id="better_bo" translate="label" type="text" sortOrder="10" showInDefault="1">
+            <label>Better BO</label>
+            <tab>opengento</tab>
+            <resource>Opengento_BetterBo::system_config</resource>
+            <group id="general" translate="label" sortOrder="0" type="text" showInDefault="1">
+            <label>General</label>
+                <field id="attributes_fields_type" sortOrder="10" type="multiselect" showInDefault="1">
+                    <label>Attributes fields type</label>
+                    <source_model>Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
