@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace Opengento\BetterBo\Model\Data\Save;
+namespace Opengento\BetterBo\Model\Data\Payload;
 
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
 

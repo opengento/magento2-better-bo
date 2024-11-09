@@ -27,13 +27,13 @@ interface GetResponseInterface
     public function setMessage(string $message): void;
 
     /**
-     * @return array
+     * @return \Opengento\BetterBo\Api\Data\GetResponseDataInterface
      */
-    public function getData(): array;
+    public function getData(): \Opengento\BetterBo\Api\Data\GetResponseDataInterface;
 
     /**
-     * @param array $data
+     * @param \Opengento\BetterBo\Api\Data\GetResponseDataInterface $data
      * @return void
      */
-    public function setData(array $data): void;
+    public function setData(\Opengento\BetterBo\Api\Data\GetResponseDataInterface $data): void;
 }
