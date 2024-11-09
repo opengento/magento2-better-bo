@@ -29,14 +29,12 @@ export const _loading = (message: string|null = null) => {
  * @param message 
  * @returns 
  */
-export const _apiResult = (axios: any, message = true, reload = false) => {
+export const _apiResult = (axios: any, message: boolean = true, reload: boolean = false) => {
     return axios
         .then((response: any) => {
             const data = JSON.parse(response.data)
             message ? _message(data) : null
 
-            // console.log(data)
-            
             // if (reload) {
             //     _loading()
             //     location.reload()
@@ -45,17 +43,8 @@ export const _apiResult = (axios: any, message = true, reload = false) => {
             return data
         })
         .catch((error: any) => {
-            console.error(error)
+            _catch(error)
         })
-}
-
-/**
- * Cache delay
- * 
- * @returns 
- */
-export const _ttl = () => {
-    return (30 * 60 * 1000)
 }
 
 /**
@@ -71,4 +60,26 @@ export const _message = (data: any) => {
             type: data?.status || 'success'
         }) 
         : null
+}
+
+/**
+ * Standard catch message
+ * 
+ * @param error 
+ */
+export const _catch = (error: any) => {
+    // console.log(error)
+    _message({
+        status: 'error',
+        message: error.message
+    })
+}
+
+/**
+ * Cache delay
+ * 
+ * @returns 
+ */
+export const _ttl = () => {
+    return (30 * 60 * 1000)
 }

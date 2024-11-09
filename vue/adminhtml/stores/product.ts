@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios'
-import { _apiResult } from '@/vue/utils/api'
+import { _apiResult, _message } from '@/vue/utils/api'
 
 /**
  * Category store
@@ -9,13 +9,27 @@ export const useProduct = defineStore('product', {
     state: () => {
         return {
             loading: true as boolean,
-            product: null as any,
             values: [] as any,
+            originalValues: [] as any,
+            savedValues: [] as any,
             config: null as any,
         }
     },
     getters: {
-        //
+        /**
+         * Get the different values
+         * 
+         * @returns 
+         */
+        _differentValues(state: any) {
+            return state.values.filter((currentValue: any) => {
+                const originalValue = state.originalValues.find((original: any) => original.storeViewId === currentValue.storeViewId);
+                return originalValue?.value !== currentValue.value;
+            }).map((value: any) => ({
+                storeViewId: value.storeViewId,
+                value: value.value
+            }))
+        }
     },
     actions: {
         /**
@@ -33,12 +47,11 @@ export const useProduct = defineStore('product', {
                     attributeCode
                 })
             ).then((data: any) => {
-                console.log(data)
+                // console.log(data)
                 this.values = data?.data?.values
+                this.originalValues = JSON.parse(JSON.stringify(data?.data?.values))
                 this.config = data?.data?.config
                 this.loading = false
-            }).catch((error: any) => {
-                console.log(error)
             })
         },
         /**
@@ -48,17 +61,26 @@ export const useProduct = defineStore('product', {
          * @param attributeCode 
          * @param values 
          */
-        postAttributes(entityId: any, attributeCode: string, values: any) {
-            _apiResult(
-                axios.post(`/rest/V1/betterbo/catalog/product/attributes`, {
+        postAttributes(entityId: any, attributeCode: string) {
+
+            if (this._differentValues.length === 0) {
+                _message({
+                    status: 'warning',
+                    message: 'No changes to save'
+                })
+                return
+            }
+
+            this.loading = true
+
+            return _apiResult(
+                axios.post(`/rest/V1/betterbo/catalog/product/attributes/save`, {
                     entityId,
                     attributeCode,
-                    values
+                    values: this._differentValues
                 })
             ).then((data: any) => {
-                console.log(data)
-            }).catch((error: any) => {
-                console.log(error)
+                this.loading = false
             })
         }
     }
