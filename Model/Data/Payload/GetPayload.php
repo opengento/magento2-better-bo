@@ -1,6 +1,6 @@
 <?php
 
-namespace Opengento\BetterBo\Model\Data\Get;
+namespace Opengento\BetterBo\Model\Data\Payload;
 
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
 

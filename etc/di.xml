@@ -6,11 +6,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Opengento\BetterBo\Api\Data\GetPayloadInterface" type="Opengento\BetterBo\Model\Data\Get\GetPayload" />
-    <preference for="Opengento\BetterBo\Api\Data\SavePayloadInterface" type="Opengento\BetterBo\Model\Data\Save\SavePayload" />
-    <preference for="Opengento\BetterBo\Api\Data\SavePayloadValueInterface" type="Opengento\BetterBo\Model\Data\Save\SavePayloadValue" />
-    <preference for="Opengento\BetterBo\Api\Data\SaveResponseInterface" type="Opengento\BetterBo\Model\Data\Save\SaveResponse" />
-    <preference for="Opengento\BetterBo\Api\Data\SaveResponseValueInterface" type="Opengento\BetterBo\Model\Data\Save\SaveResponseValue" />
+    <preference for="Opengento\BetterBo\Api\Data\GetPayloadInterface" type="Opengento\BetterBo\Model\Data\Payload\GetPayload" />
+    <preference for="Opengento\BetterBo\Api\Data\SavePayloadInterface" type="Opengento\BetterBo\Model\Data\Payload\SavePayload" />
+    <preference for="Opengento\BetterBo\Api\Data\SavePayloadValueInterface" type="Opengento\BetterBo\Model\Data\Payload\SavePayloadValue" />
+    <preference for="Opengento\BetterBo\Api\Data\SaveResponseInterface" type="Opengento\BetterBo\Model\Data\Response\SaveResponse" />
+    <preference for="Opengento\BetterBo\Api\Data\SaveResponseValueInterface" type="Opengento\BetterBo\Model\Data\Response\SaveResponseValue" />
+    <preference for="Opengento\BetterBo\Api\Data\GetResponseInterface" type="Opengento\BetterBo\Model\Data\Response\GetResponse" />
+    <preference for="Opengento\BetterBo\Api\Data\GetResponseDataInterface" type="Opengento\BetterBo\Model\Data\Response\GetResponseData" />
+    <preference for="Opengento\BetterBo\Api\Data\GetResponseValuesInterface" type="Opengento\BetterBo\Model\Data\Response\GetResponseValues" />
+    <preference for="Opengento\BetterBo\Api\Data\GetResponseConfigInterface" type="Opengento\BetterBo\Model\Data\Response\GetResponseConfig" />
+    <preference for="Opengento\BetterBo\Api\Data\GetResponseConfigOptionsInterface" type="Opengento\BetterBo\Model\Data\Response\GetResponseConfigOptions" />
+
     <preference for="Opengento\BetterBo\Api\ProductManagementInterface" type="Opengento\BetterBo\Model\ProductManagement" />
     <preference for="Opengento\BetterBo\Api\GetProductAttributesInterface" type="Opengento\BetterBo\Model\GetProductAttributes" />
+
 </config>

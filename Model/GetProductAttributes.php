@@ -22,6 +22,14 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Opengento\BetterBo\Api\Data\GetPayloadInterface;
+use Opengento\BetterBo\Api\Data\GetResponseConfigInterface;
+use Opengento\BetterBo\Api\Data\GetResponseConfigInterfaceFactory;
+use Opengento\BetterBo\Api\Data\GetResponseConfigOptionsInterface;
+use Opengento\BetterBo\Api\Data\GetResponseConfigOptionsInterfaceFactory;
+use Opengento\BetterBo\Api\Data\GetResponseDataInterfaceFactory;
+use Opengento\BetterBo\Api\Data\GetResponseDataInterface;
+use Opengento\BetterBo\Api\Data\GetResponseValuesInterface;
+use Opengento\BetterBo\Api\Data\GetResponseValuesInterfaceFactory;
 use Opengento\BetterBo\Api\GetProductAttributesInterface;
 
 class GetProductAttributes implements GetProductAttributesInterface
@@ -41,6 +49,10 @@ class GetProductAttributes implements GetProductAttributesInterface
         protected \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         protected StoreManagerInterface                                          $storeManager,
         protected ProductRepositoryInterface                                     $productRepository,
+        protected GetResponseDataInterfaceFactory                                $getResponseDataInterfaceFactory,
+        protected GetResponseConfigInterfaceFactory                              $getResponseConfigInterfaceFactory,
+        protected GetResponseValuesInterfaceFactory                              $getResponseValuesInterfaceFactory,
+        protected GetResponseConfigOptionsInterfaceFactory                       $getResponseConfigOptionsInterfaceFactory
     )
     {
     }
@@ -49,39 +61,49 @@ class GetProductAttributes implements GetProductAttributesInterface
      * @inheritDoc
      * @throws NoSuchEntityException
      */
-    public function execute(GetPayloadInterface $payload): array
+    public function execute(GetPayloadInterface $payload): GetResponseDataInterface
     {
-        return [
-            'config' => $this->getAttributeConfig($payload->getAttributeCode()),
-            'values' => $this->getAttributeValues($payload)
-        ];
+        /** @var GetResponseDataInterface $response */
+        $response = $this->getResponseDataInterfaceFactory->create();
+
+        $response->setValues($this->getAttributeValues($payload));
+        $response->setConfig($this->getAttributeConfig($payload->getAttributeCode()));
+
+        return $response;
     }
 
     /**
      * Config and potentials options of attribute
      *
      * @param string $attributeCode
-     * @return array
+     * @return GetResponseConfigInterface
      * @throws NoSuchEntityException
      */
-    protected function getAttributeConfig(string $attributeCode): array
+    protected function getAttributeConfig(string $attributeCode): GetResponseConfigInterface
     {
+        /** @var GetResponseConfigInterface $result */
+        $result = $this->getResponseConfigInterfaceFactory->create();
+
         $attribute = $this->attributeRepository->get(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode
         );
 
-        return [
-            'type' => $attribute->getFrontendInput(),
-            'frontendLabel' => $attribute->getDefaultFrontendLabel(),
-            'options' => array_map(
-                static fn(AttributeOptionInterface $option) => [
-                    'label' => $option->getLabel(),
-                    'value' => (string)$option->getValue()
-                ],
-                $attribute->getOptions()
-            ),
-        ];
+        $result->setType($attribute->getFrontendInput());
+        $result->setFrontendLabel($attribute->getDefaultFrontendLabel());
+        $formattedOptions = \array_map(
+            function (AttributeOptionInterface $attributeOption)  {
+                /** @var GetResponseConfigOptionsInterface $option */
+                $option = $this->getResponseConfigOptionsInterfaceFactory->create();
+                $option->setLabel($attributeOption->getLabel());
+                $option->setValue($attributeOption->getValue());
+                return $option;
+            },
+            $attribute->getOptions()
+        );
+        $result->setOptions($formattedOptions);
+
+        return $result;
     }
 
 
@@ -97,11 +119,12 @@ class GetProductAttributes implements GetProductAttributesInterface
 
         foreach ($stores as $storeView) {
             $product = $this->productRepository->getById($payload->getEntityId(), storeId: $storeView->getId());
-            $results[] = [
-                'storeViewId' => $storeView->getId(),
-                'storeViewLabel' => $this->buildStoreViewLabel($storeView),
-                'value' => $product->getData($payload->getAttributeCode())
-            ];
+            /** @var GetResponseValuesInterface $result */
+            $result = $this->getResponseValuesInterfaceFactory->create();
+            $result->setValue($product->getData($payload->getAttributeCode()));
+            $result->setStoreViewId((string)$storeView->getId());
+            $result->setStoreViewLabel($this->buildStoreViewLabel($storeView));
+            $results[] = $result;
         }
 
         $this->sortResults($results);
@@ -133,7 +156,7 @@ class GetProductAttributes implements GetProductAttributesInterface
     protected function sortResults(array &$results): void
     {
         usort($results, function ($a, $b) {
-            return strcmp($a['storeViewLabel'], $b['storeViewLabel']);
+            return strcmp($a->getStoreViewLabel(), $b->getStoreViewLabel());
         });
     }
 }
