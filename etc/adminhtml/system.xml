@@ -9,10 +9,14 @@
             <tab>opengento</tab>
             <resource>Opengento_BetterBo::system_config</resource>
             <group id="general" translate="label" sortOrder="0" type="text" showInDefault="1">
-            <label>General</label>
+                <label>General</label>
                 <field id="attributes_fields_type" sortOrder="10" type="multiselect" showInDefault="1">
                     <label>Attributes fields type</label>
                     <source_model>Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype</source_model>
+                </field>
+                <field id="tinymce_api_key" translate="label" type="text" sortOrder="20" showInDefault="1">
+                    <label>TinyMCE API Key</label>
+                    <comment>Enter your TinyMCE API key here</comment>
                 </field>
             </group>
         </section>
