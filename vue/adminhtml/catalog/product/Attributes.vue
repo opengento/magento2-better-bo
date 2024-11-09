@@ -9,35 +9,21 @@
         :lock-scroll="true" 
     >
         <template #default>
-            <!-- {{ productStore.values }}
-            {{ productStore.config }} -->
-            <el-form 
-                label-position="top"
-                ref="form"
-            >
+            <el-form label-position="top">
                 <div v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId">
-                    <!-- {{ attribute }} -->
-                    <el-form-item :label="attribute.storeViewLabel">
-                        <!-- {{ attribute.value }} -->
+                    <el-form-item 
+                        :label="attribute.storeViewLabel"
+                        :class="{ 
+                            'error': _findStoreViewId(productStore.errorValues, attribute.storeViewId),
+                            'success': _findStoreViewId(productStore.successValues, attribute.storeViewId),
+                        }"
+                    >
                         <el-input 
                             v-if="productStore.config?.type === 'text'" 
                             v-model="attribute.value"
                         />
-                        <!-- <el-select 
-                            v-else-if="productStore.config?.type === 'select' && productStore.config?.options" 
-                            v-model="attribute.value"
-                            value-key="value"
-                            filterable
-                        >
-                            <el-option
-                                v-for="item in productStore.config?.options"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            />
-                        </el-select> -->
                         <select 
-                            class="el-select"
+                            class="el-select input-with-trash"
                             v-else-if="productStore.config?.type === 'select' && productStore.config?.options" 
                             @change="attribute.value = $event.target.value"
                         >
@@ -50,14 +36,27 @@
                                 {{ item.label }}
                             </option>
                         </select>
+                        <span @click="_delete(attributeCode, attribute.storeViewId)" class="trash-icon">
+                            <unicon 
+                                name="trash-alt" 
+                                width="16" 
+                                height="16" 
+                                fill="white" 
+                                class="cursor-pointer"
+                            />
+                        </span>
                     </el-form-item>
                 </div>
             </el-form>
         </template>
         <template #footer>
             <div style="flex: auto">
-                <el-button @click="drawer = false">cancel</el-button>
-                <el-button type="primary" @click="_post()">save</el-button>
+                <el-button @click="drawer = false">
+                    Cancel
+                </el-button>
+                <el-button type="primary" @click="_post()" :loading="productStore.loading">
+                    Save
+                </el-button>
             </div>
         </template>
     </el-drawer>
@@ -65,13 +64,8 @@
 
 <script setup lang="ts">
 
-    import { ref, watch, onMounted, onUnmounted } from 'vue';
+    import { ref, onMounted, onUnmounted } from 'vue';
     import { useProduct } from '@/vue/adminhtml/stores/product';
-
-    /**
-     * Tests requests
-     */
-    import { getAttributes } from '@/vue/tests/requests';
 
     /**
      * Props from HTML
@@ -80,19 +74,12 @@
     const props = Object.assign({}, (mountEl instanceof HTMLElement) ? mountEl.dataset : {}) as any;
 
     /**
-     * Environment
-     */
-    // const env = ref<'test' | 'prod'>('prod');
-
-    /**
      * Set data
      */
     const productStore = useProduct();
     const drawer = ref<boolean>(false);
-    const attributeCode = ref<any>(null);
-    const attributes = ref<any>(null);
-    const config = ref<any>(null);
-    const form = ref<any>(null);
+    const attributeCode = ref<string|null>(null);
+
     /**
      * Handle click
      * 
@@ -100,10 +87,10 @@
      */
     const handleClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        if (target.dataset.attributeCode !== undefined && drawer.value === false) {
-            console.log('ping')
-            attributeCode.value = target.dataset.attributeCode;
-            // (env === 'test') ? _test() : _get()
+        const parentWithAttribute = target.closest('[data-attribute-code]');
+        
+        if (parentWithAttribute && drawer.value === false) {
+            attributeCode.value = parentWithAttribute.getAttribute('data-attribute-code');
             _get()
             drawer.value = true;
         }
@@ -114,61 +101,89 @@
      */
     const _get = () => {
         productStore.getAttributes(props.productId, attributeCode.value)
-        form.value = productStore.values.reduce((acc: any, value: any) => {
-            acc[value.storeViewId] = value.value;
-            return acc;
-        }, {});
     }
 
     /**
      * Post attributes
      */
     const _post = () => {
-        // productStore.postAttributes(props.productId, attributeCode.value, attributes.value)
-        //     .then(() => {
-        //         drawer.value = false;
-        //     });
+        productStore.postAttributes(props.productId, attributeCode.value, productStore.values)
+            ?.then((data: any) => {
+                // console.log(data)
+                // drawer.value = false
+            })
+    }
+
+    /**
+     * Delete attribute
+     */
+    const _delete = (attributeCode: string, storeViewId: number) => {
+        productStore.deleteAttribute(props.productId, attributeCode, storeViewId)
+    }
+
+    /**
+     * Find in array
+     * 
+     * @param array 
+     * @param value 
+     */
+    const _findStoreViewId = (array: any[], storeViewId: number) => {
+        return array.find((item: any) => item.storeViewId === storeViewId)
     }
 
     /**
      * Setup observer after component is mounted
      */
     onMounted(() => {
-        document.addEventListener('click', handleClick);
+        document.addEventListener('click', handleClick)
     });
 
     /**
      * Cleanup listener when component is unmounted
      */
     onUnmounted(() => {
-        document.removeEventListener('click', handleClick);
+        document.removeEventListener('click', handleClick)
     });
-
-
-    /**
-     * Test
-     */
-    const _test = () => {
-        const _test = getAttributes(attributeCode.value, props.productId);
-        console.log(_test);
-        attributes.value = _test.return.data.values;
-        config.value = _test.return.data.config;
-        // console.log(attributes.value);
-        // console.log(config.value);
-    }
 
 </script>
 
 <style lang="scss">
     .el-select {
         width: 100%;
-        height: 40px;
-        border: 1px solid lightgrey;
-        border-radius: 5px;
+        border: 1px solid var(--el-border-color);
+        background-color: var(--el-input-bg-color,var(--el-fill-color-blank));
+        border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
         padding: 0 10px;
+        height: 32px;
         &:focus {
-            border-color: #409EFF;
+            border-color: var(--el-color-primary);
             outline: 0;
+        }
+        &.saved {
+            background-color: var(--el-color-success);
+        }
+    }
+    // .input-with-trash .el-input-group__prepend {
+    //     background-color: var(--el-color-error);
+    // }
+    .trash-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        // background-color: var(--el-color-error);
+        background-color: #e6e6e6;
+        border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
+        width: 30px;
+        display: grid;
+        align-content: center;
+        justify-content: center;
+        padding-bottom: 2px;
+        padding-left: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: var(--el-color-error);
         }
     }
 </style>

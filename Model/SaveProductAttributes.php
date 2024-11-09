@@ -14,21 +14,25 @@ namespace Opengento\BetterBo\Model;
 use Magento\Catalog\Model\Product\Action;
 use Opengento\BetterBo\Api\Data\SavePayloadInterface;
 use Opengento\BetterBo\Api\Data\SavePayloadValueInterface;
-use Opengento\BetterBo\Model\Exception\SaveException;
+use Opengento\BetterBo\Api\Data\SaveResponseValueInterfaceFactory;
 
 class SaveProductAttributes
 {
     public function __construct(
         protected Action $productAction,
+        protected SaveResponseValueInterfaceFactory $saveResponseValueFactory
     )
     {
     }
 
     /**
-     * @throws SaveException
+     * @param SavePayloadInterface $payload
+     * @return \Opengento\BetterBo\Api\Data\SaveResponseValueInterface
      */
-    public function execute(SavePayloadInterface $payload): void
+    public function execute(SavePayloadInterface $payload): \Opengento\BetterBo\Api\Data\SaveResponseValueInterface
     {
+        $success = $error = [];
+
         $dataByStoreId = array_reduce(
             $payload->getValues(),
             static function ($r, SavePayloadValueInterface $value) use ($payload) {
@@ -40,12 +44,25 @@ class SaveProductAttributes
             []
         );
 
-        try {
-            foreach ($dataByStoreId as $storeId => $data) {
+        foreach ($dataByStoreId as $storeId => $data) {
+            try {
                 $this->productAction->updateAttributes([$payload->getEntityId()], $data, $storeId);
+                $success[] = $storeId;
+            } catch (\Exception) {
+                $error[] = $storeId;
             }
-        } catch (\Exception $e) {
-            throw new SaveException(__('Unable to save entity: %1', $e->getMessage()));
         }
+
+        return $this->getResponse($success, $error);
+    }
+
+    protected function getResponse(array $success, array $error): \Opengento\BetterBo\Api\Data\SaveResponseValueInterface
+    {
+        /** @var \Opengento\BetterBo\Api\Data\SaveResponseValueInterface $response */
+        $response = $this->saveResponseValueFactory->create();
+        $response->setSuccess($success);
+        $response->setError($error);
+
+        return $response;
     }
 }
