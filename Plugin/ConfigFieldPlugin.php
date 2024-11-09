@@ -58,6 +58,7 @@ class ConfigFieldPlugin
      */
     public function afterGetTooltip(Subject $subject, $result)
     {
+        // dd("1");
         $lines = [$result];
         foreach($this->websiteRepository->getList() as $website) {
             if ($this->getWebsiteParam() || $this->getStoreParam()) {
@@ -91,7 +92,7 @@ class ConfigFieldPlugin
      */
     public function afterGetComment(Subject $subject, $result)
     {
-
+        // dd("2");
         if ($result instanceof Phrase) {
             $result = (string) $result;
         }
@@ -122,6 +123,7 @@ class ConfigFieldPlugin
      */
     private function getScopeHint(Subject $field, $scopeType, $scope)
     {
+        // dd("3");
         $path = $this->getPath($field);
         $scopeLine = '';
         if ($websiteId = $this->getWebsiteParam()) {
@@ -166,6 +168,7 @@ class ConfigFieldPlugin
 
     private function getValueLabel(Subject $field, string $scopeValue): string
     {
+        // dd("4");
         $scopeValue = trim($scopeValue);
         if ($field->hasOptions()) {
             if ($field->getType() === 'multiselect' && strpos($scopeValue, ',') !== false) {

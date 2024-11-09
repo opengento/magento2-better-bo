@@ -48,22 +48,22 @@ class ProductEavDataProviderPlugin
     {
         if (!isset($result['arguments']['data']['config']['code'])
             || $result['arguments']['data']['config']['globalScope']
-            || $result['arguments']['data']['config']['code'] == 'quantity_and_stock_status'
+            || !in_array($result['arguments']['data']['config']['dataType'], ['text', 'select'])
         ) {
             return $result;
         }
 
-        $scopeHints = [];
         $attributeCode = $result['arguments']['data']['config']['code'];
         $storeViews = $this->getStores();
         $product = $this->registry->registry('current_product');
 
-        if ($product === null || $product->getId() === null) {
+        $productId = $product->getId();
+        if ($product === null || $productId === null) {
             return $result;
         }
 
         foreach ($storeViews as $storeView) {
-            $productByStoreCode = $this->getProductInStoreView($product->getId(), $storeView->getId());
+            $productByStoreCode = $this->getProductInStoreView($productId, $storeView->getId());
             $currentScopeValueForCode = $value = $productByStoreCode->getData($attributeCode);
 
             if ($result['arguments']['data']['config']['dataType'] == 'select'
@@ -72,15 +72,6 @@ class ProductEavDataProviderPlugin
                 $value = $productByStoreCode->getResource()->getAttribute($attributeCode)->getSource()->getOptionText($currentScopeValueForCode);
             }
 
-            // This checks if we can cast $value to a string
-            // If this fails, we json_encode the value, so we eventually do get a string representation
-            // If the json_encode fails for some reason, we just ignore it and won't output anything
-            //
-            // This problem can be seen in practice when:
-            // - having at least 2 websites
-            // - having the catalog price scope set to Website
-            // - using different tier prices for a single product over multiple websites
-            // (Another bug in that particular case, is that the tooltip doesn't seem to show up, so that's another thing which will need to get fixed someday)
             $valueAsString = null;
             try {
                 $valueAsString = (string) $value;
@@ -91,12 +82,8 @@ class ProductEavDataProviderPlugin
                 }
             }
 
-            if ($valueAsString !== null && $product->getData($attributeCode) !== $currentScopeValueForCode) {
-                $scopeHints[] = $storeView->getName() . ': ' . $valueAsString;
-            }
-
-            if (!empty($scopeHints)) {
-                $result['arguments']['data']['config']['tooltip']['description'] = implode('<br>', $scopeHints);
+            if (true) { // edit 
+                $result['arguments']['data']['config']['storebtn'] = "<button class='btn-store-view' data-attribute-code='{$attributeCode}'>" . __('See store values') . "</button>";
             }
         }
 
