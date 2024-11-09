@@ -5,6 +5,10 @@
     </type>
 
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav">
-        <plugin name="opengento_betterbo_plugin_field" type="Opengento\BetterBo\Plugin\ProductEavDataProviderPlugin" sortOrder="1" disabled="false" />
+        <plugin name="opengento_betterbo_plugin_product_field" type="Opengento\BetterBo\Plugin\ProductEavDataProviderPlugin" sortOrder="1" disabled="false" />
     </type>
+
+    <!-- <type name="Magento\Catalog\Model\Category\DataProvider">
+        <plugin name="opengento_betterbo_plugin_category_field" type="Opengento\BetterBo\Plugin\CategoryEavDataProviderPlugin" sortOrder="1" disabled="false" />
+    </type> -->
 </config>
