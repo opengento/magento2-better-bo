@@ -32,6 +32,7 @@ export const _loading = (message: string|null = null) => {
 export const _apiResult = (axios: any, message: boolean = true, reload: boolean = false) => {
     return axios
         .then((response: any) => {
+            console.log(response)
             const data = JSON.parse(response.data)
             message ? _message(data) : null
 

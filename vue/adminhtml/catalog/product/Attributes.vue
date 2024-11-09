@@ -10,10 +10,19 @@
     >
         <template #default>
             <el-form label-position="top">
-                <div v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId">
+
+                <div v-if="['textarea', 'texteditor'].includes(productStore.config?.type) && !productStore.config?.tinymceApiKey">
+                    <el-alert title="TinyMCE API key is not set" type="error" />
+                </div>
+
+                <div 
+                    v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId"
+                    class="drawer-row"
+                >
                     <el-form-item 
                         :label="attribute.storeViewLabel"
                         :class="{ 
+                            'test': true,
                             'error': _findStoreViewId(productStore.errorValues, attribute.storeViewId),
                             'success': _findStoreViewId(productStore.successValues, attribute.storeViewId),
                         }"
@@ -36,15 +45,30 @@
                                 {{ item.label }}
                             </option>
                         </select>
-                        <span @click="_delete(attributeCode, attribute.storeViewId)" class="trash-icon">
-                            <unicon 
-                                name="trash-alt" 
-                                width="16" 
-                                height="16" 
-                                fill="white" 
-                                class="cursor-pointer"
+                        <div 
+                            v-else-if="['textarea', 'texteditor'].includes(productStore.config?.type)" 
+                            style="width: 100%;"
+                        >
+                            <editor
+                                v-if="productStore.config?.tinymceApiKey || true"
+                                v-model="attribute.value"
+                                :api-key="productStore.config?.tinymceApiKey"
+                                :init="_editorInit"
                             />
-                        </span>
+                        </div>
+                        <el-popconfirm title="Are you sure to delete this?">
+                            <template #reference>
+                                <span class="trash-icon">
+                                    <unicon 
+                                        name="trash-alt" 
+                                        width="16" 
+                                        height="16" 
+                                        fill="white" 
+                                        class="cursor-pointer"
+                                    />
+                                </span>
+                            </template>
+                        </el-popconfirm>
                     </el-form-item>
                 </div>
             </el-form>
@@ -64,8 +88,11 @@
 
 <script setup lang="ts">
 
-    import { ref, onMounted, onUnmounted } from 'vue';
+    import { ref, watch, onMounted, onUnmounted } from 'vue';
     import { useProduct } from '@/vue/adminhtml/stores/product';
+    import { _editorInit } from '@/vue/utils/form';
+
+    import Editor from '@tinymce/tinymce-vue'
 
     /**
      * Props from HTML
@@ -76,22 +103,31 @@
     /**
      * Set data
      */
-    const productStore = useProduct();
-    const drawer = ref<boolean>(false);
-    const attributeCode = ref<string|null>(null);
+    const productStore = useProduct()
+    const drawer = ref<boolean>(false)
+    const attributeCode = ref<string|null>(null)
+
+    // Add watcher for drawer
+    watch(drawer, (newValue) => {
+        if (!newValue) { // When drawer is closed
+            productStore.values = [] // Reset values
+            attributeCode.value = null
+        }
+    })
 
     /**
      * Handle click
      * 
      * @param event 
      */
-    const handleClick = (event: MouseEvent) => {
+    const handleClick = async (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         const parentWithAttribute = target.closest('[data-attribute-code]');
         
         if (parentWithAttribute && drawer.value === false) {
             attributeCode.value = parentWithAttribute.getAttribute('data-attribute-code');
-            _get()
+            await _get() // Wait for _get to complete
+
             drawer.value = true;
         }
     };
@@ -99,8 +135,8 @@
     /**
      * Get attributes
      */
-    const _get = () => {
-        productStore.getAttributes(props.productId, attributeCode.value)
+    const _get = async () => {
+        await productStore.getAttributes(props.productId, attributeCode.value)
     }
 
     /**
@@ -128,7 +164,7 @@
      * @param value 
      */
     const _findStoreViewId = (array: any[], storeViewId: number) => {
-        return array.find((item: any) => item.storeViewId === storeViewId)
+        return array.find((item: any) => item === storeViewId)
     }
 
     /**
@@ -148,9 +184,11 @@
 </script>
 
 <style lang="scss">
-    .el-select {
+    .el-form-item .el-select {
         width: 100%;
-        border: 1px solid var(--el-border-color);
+        // border: 1px solid var(--el-border-color);
+        border: none !important;
+        box-shadow: 0 0 0 1px var(--el-input-border-color,var(--el-border-color)) inset;
         background-color: var(--el-input-bg-color,var(--el-fill-color-blank));
         border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
         padding: 0 10px;
@@ -163,9 +201,22 @@
             background-color: var(--el-color-success);
         }
     }
-    // .input-with-trash .el-input-group__prepend {
-    //     background-color: var(--el-color-error);
-    // }
+    .el-form-item.success {
+        .el-select, .el-input__wrapper {
+            box-shadow: 0 0 0 1px var(--el-color-success) inset;
+        }
+        .tox-tinymce {
+            border-color: var(--el-color-success);
+        }
+    }
+    .el-form-item.error {
+        .el-select, .el-input__wrapper, .tox-tinymce {
+            box-shadow: 0 0 0 1px var(--el-color-error) inset;
+        }
+        .tox-tinymce {
+            border-color: var(--el-color-error);
+        }
+    }
     .trash-icon {
         position: absolute;
         right: 0;
@@ -184,6 +235,12 @@
         transition: background-color 0.3s ease;
         &:hover {
             background-color: var(--el-color-error);
+        }
+    }
+    .drawer-row {
+        width: 100%;
+        .tox-tinymce {
+            width: calc(100% - 40px);
         }
     }
 </style>

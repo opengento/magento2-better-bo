@@ -42,25 +42,24 @@ export const useProduct = defineStore('product', {
          * 
          * @returns 
          */
-        getAttributes(entityId: number, attributeCode: string) {
+        async getAttributes(entityId: number, attributeCode: string) {
             this.loading = true
-            _apiResult(
-                axios({
-                    url: `/rest/V1/betterbo/catalog/product/attributes`,   
-                    method: 'POST',
-                    data: {
-                        entityId,
-                        attributeCode,
-                    },
-                    // cache: {
-                    //     ttl: _ttl(),
-                    //     interpretHeader: false,
-                    // }
-                })
-            ).then((data: any) => {
-                this.values = data?.data?.values
-                this.originalValues = JSON.parse(JSON.stringify(data?.data?.values))
-                this.config = data?.data?.config
+            this.successValues = []
+            this.errorValues = []
+        
+            return axios({ // Return the promise
+                url: `/rest/V1/betterbo/catalog/product/attributes`,   
+                method: 'POST',
+                data: {
+                    entityId,
+                    attributeCode,
+                },
+            }).then((response: any) => {
+                const data = JSON.parse(response.data)
+                console.log(data)
+                this.values = data.data.values
+                this.originalValues = JSON.parse(JSON.stringify(data.data.values))
+                this.config = data.data.config
                 this.loading = false
             })
         },
@@ -83,25 +82,38 @@ export const useProduct = defineStore('product', {
 
             this.loading = true
 
-            return _apiResult(
-                axios({
-                    url: `/rest/V1/betterbo/catalog/product/attributes/save`,   
-                    method: 'POST',
-                    data: {
-                        entityId,
-                        attributeCode,
-                        values: this._differentValues
-                    },
-                    // cache: {
-                    //     ttl: _ttl(),
-                    //     interpretHeader: false,
-                    // }
-                })
-            ).then((data: any) => {
-                console.log(data)
+            return axios({
+                url: `/rest/V1/betterbo/catalog/product/attributes/save`,   
+                method: 'POST',
+                data: {
+                    entityId,
+                    attributeCode,
+                    values: this._differentValues
+                },
+                // cache: {
+                //     ttl: _ttl(),
+                //     interpretHeader: false,
+                // }
+            }).then((response: any) => {
+                // const data = JSON.parse(response.data)
+                const data = response.data
                 this.loading = false
-                this.successValues = JSON.parse(JSON.stringify(data.data.successValues))
-                this.errorValues = JSON.parse(JSON.stringify(data.data.errorValues))
+                this.successValues = data?.data?.success
+                this.errorValues = data?.data?.error
+
+                if (this.successValues.length > 0) {
+                    _message({
+                        status: 'success',
+                        message: `Values saved for ${this.successValues.length} stores`
+                    })
+                }
+
+                if (this.errorValues.length > 0) {
+                    _message({
+                        status: 'error',
+                        message: `Values not saved for ${this.errorValues.length} stores`
+                    })
+                }
             })
         },
         /**
@@ -114,17 +126,16 @@ export const useProduct = defineStore('product', {
         deleteAttribute(entityId: number, attributeCode: string, storeViewId: number) {
             this.errorLoading = true
 
-            _apiResult(
-                axios({
-                    url: `/rest/V1/betterbo/catalog/product/attributes/delete`,   
-                    method: 'POST',
-                    data: {
-                        entityId,
-                        attributeCode,
-                        storeViewId,
-                    },
-                })
-            ).then((data: any) => {
+            axios({
+                url: `/rest/V1/betterbo/catalog/product/attributes/delete`,   
+                method: 'POST',
+                data: {
+                    entityId,
+                    attributeCode,
+                    storeViewId,
+                },
+            }).then((response: any) => {
+                const data = JSON.parse(response.data)
                 console.log(data)
                 this.errorLoading = false
             })

@@ -37,6 +37,7 @@ mix
                 './**/*.vue',
                 './**/*.ts',
                 './node_modules/element-plus/**/*.js',
+                './node_modules/tinymce/**/*.js',
             ],
             skippedContentGlobs: [
                 '**/element-plus/**/*.css'
