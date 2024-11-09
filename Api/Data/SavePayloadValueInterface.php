@@ -6,7 +6,7 @@ namespace Opengento\BetterBo\Api\Data;
 interface SavePayloadValueInterface
 {
     /**
-     * @param string $storeId
+     * @param string $storeViewId
      * @return void
      */
     public function setStoreViewId(string $storeViewId): void;
