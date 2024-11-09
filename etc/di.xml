@@ -7,6 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Opengento\BetterBo\Api\Data\GetPayloadInterface" type="Opengento\BetterBo\Model\Data\GetPayload" />
+    <preference for="Opengento\BetterBo\Api\Data\SavePayloadInterface" type="Opengento\BetterBo\Model\Data\SavePayload" />
+    <preference for="Opengento\BetterBo\Api\Data\SavePayloadValueInterface" type="Opengento\BetterBo\Model\Data\SavePayloadValue" />
     <preference for="Opengento\BetterBo\Api\ProductManagementInterface" type="Opengento\BetterBo\Model\ProductManagement" />
     <preference for="Opengento\BetterBo\Api\GetProductAttributesInterface" type="Opengento\BetterBo\Model\GetProductAttributes" />
 </config>
