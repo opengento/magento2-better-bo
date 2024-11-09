@@ -51,38 +51,39 @@ class ConfigFieldPlugin
         $this->request = $request;
     }
 
-    /**
-     * @param Subject $subject
-     * @param string $result
-     * @return string
-     */
-    public function afterGetTooltip(Subject $subject, $result)
-    {
-        $lines = [$result];
-        foreach($this->websiteRepository->getList() as $website) {
-            if ($this->getWebsiteParam() || $this->getStoreParam()) {
-                continue;
-            }
-            // Only show website specific values in default scope
-            if ($scopeLine = $this->getScopeHint($subject, self::SCOPE_TYPE_WEBSITES, $website)) {
-                $lines[] = $scopeLine;
-            }
-        }
-        foreach($this->storeRepository->getList() as $store) {
-            if ($this->getStoreParam($store)) {
-                continue;
-            }
-            if (($websiteId = $this->getWebsiteParam()) && ($store->getWebsiteId() != $websiteId)) {
-                continue;
-            }
-            // Only show store specific values in default scope and in parent website scope
-            if ($scopeLine = $this->getScopeHint($subject, self::SCOPE_TYPE_STORES, $store)) {
-                $lines[] = $scopeLine;
-            }
-        }
+    // /**
+    //  * @param Subject $subject
+    //  * @param string $result
+    //  * @return string
+    //  */
+    // public function afterGetTooltip(Subject $subject, $result)
+    // {
+    //     // dd("1");
+    //     $lines = [$result];
+    //     foreach($this->websiteRepository->getList() as $website) {
+    //         if ($this->getWebsiteParam() || $this->getStoreParam()) {
+    //             continue;
+    //         }
+    //         // Only show website specific values in default scope
+    //         if ($scopeLine = $this->getScopeHint($subject, self::SCOPE_TYPE_WEBSITES, $website)) {
+    //             $lines[] = $scopeLine;
+    //         }
+    //     }
+    //     foreach($this->storeRepository->getList() as $store) {
+    //         if ($this->getStoreParam($store)) {
+    //             continue;
+    //         }
+    //         if (($websiteId = $this->getWebsiteParam()) && ($store->getWebsiteId() != $websiteId)) {
+    //             continue;
+    //         }
+    //         // Only show store specific values in default scope and in parent website scope
+    //         if ($scopeLine = $this->getScopeHint($subject, self::SCOPE_TYPE_STORES, $store)) {
+    //             $lines[] = $scopeLine;
+    //         }
+    //     }
 
-        return implode('<br />', array_filter($lines));
-    }
+    //     return implode('<br />', array_filter($lines));
+    // }
 
     /**
      * @param Subject $subject
@@ -91,7 +92,7 @@ class ConfigFieldPlugin
      */
     public function afterGetComment(Subject $subject, $result)
     {
-
+        // dd("2");
         if ($result instanceof Phrase) {
             $result = (string) $result;
         }
@@ -114,87 +115,89 @@ class ConfigFieldPlugin
         return $path = $subject->getConfigPath() ?: $subject->getPath();
     }
 
-    /**
-     * @param Subject $field
-     * @param string $scopeType
-     * @param WebsiteInterface|StoreInterface $scope
-     * @return string
-     */
-    private function getScopeHint(Subject $field, $scopeType, $scope)
-    {
-        $path = $this->getPath($field);
-        $scopeLine = '';
-        if ($websiteId = $this->getWebsiteParam()) {
-            $currentValue = $this->scopeConfig->getValue(
-                $path,
-                ScopeInterface::SCOPE_WEBSITE,
-                $websiteId
-            );
-        } else {
-            $currentValue = $this->scopeConfig->getValue($path);
-        }
-        $scopeValue = $this->scopeConfig->getValue($path, $scopeType, $scope->getId());
+    // /**
+    //  * @param Subject $field
+    //  * @param string $scopeType
+    //  * @param WebsiteInterface|StoreInterface $scope
+    //  * @return string
+    //  */
+    // private function getScopeHint(Subject $field, $scopeType, $scope)
+    // {
+    //     // dd("3");
+    //     $path = $this->getPath($field);
+    //     $scopeLine = '';
+    //     if ($websiteId = $this->getWebsiteParam()) {
+    //         $currentValue = $this->scopeConfig->getValue(
+    //             $path,
+    //             ScopeInterface::SCOPE_WEBSITE,
+    //             $websiteId
+    //         );
+    //     } else {
+    //         $currentValue = $this->scopeConfig->getValue($path);
+    //     }
+    //     $scopeValue = $this->scopeConfig->getValue($path, $scopeType, $scope->getId());
         
-        if (is_array($currentValue) || is_array($scopeValue)) {
-            return $scopeLine;
-        }
+    //     if (is_array($currentValue) || is_array($scopeValue)) {
+    //         return $scopeLine;
+    //     }
         
-        $currentValue = (string) $currentValue;
-        $scopeValue = (string) $scopeValue;
+    //     $currentValue = (string) $currentValue;
+    //     $scopeValue = (string) $scopeValue;
         
-        // dd($currentValue, $scopeValue);
-        if ($scopeValue != $currentValue) {
-            $scopeValue = $this->escaper->escapeHtml($scopeValue);
+    //     // dd($currentValue, $scopeValue);
+    //     if ($scopeValue != $currentValue) {
+    //         $scopeValue = $this->escaper->escapeHtml($scopeValue);
 
-            switch($scopeType) {
-                case self::SCOPE_TYPE_STORES:
-                    return __(
-                        'Store <code>%1</code>: "%2"',
-                        $scope->getCode(),
-                        $this->getValueLabel($field, $scopeValue)
-                    );
-                case self::SCOPE_TYPE_WEBSITES:
-                    return __(
-                        'Website <code>%1</code>: "%2"',
-                        $scope->getCode(),
-                        $this->getValueLabel($field, $scopeValue)
-                    );
-            }
-        }
-        return $scopeLine;
-    }
+    //         switch($scopeType) {
+    //             case self::SCOPE_TYPE_STORES:
+    //                 return __(
+    //                     'Store <code>%1</code>: "%2"',
+    //                     $scope->getCode(),
+    //                     $this->getValueLabel($field, $scopeValue)
+    //                 );
+    //             case self::SCOPE_TYPE_WEBSITES:
+    //                 return __(
+    //                     'Website <code>%1</code>: "%2"',
+    //                     $scope->getCode(),
+    //                     $this->getValueLabel($field, $scopeValue)
+    //                 );
+    //         }
+    //     }
+    //     return $scopeLine;
+    // }
 
-    private function getValueLabel(Subject $field, string $scopeValue): string
-    {
-        $scopeValue = trim($scopeValue);
-        if ($field->hasOptions()) {
-            if ($field->getType() === 'multiselect' && strpos($scopeValue, ',') !== false) {
-                return implode(
-                    ', ',
-                    array_map(
-                        function ($key) use ($field) {
-                            return $this->getValueLabel($field, $key);
-                        },
-                        explode(',', $scopeValue)
-                    )
-                );
-            }
-            foreach ($field->getOptions() as $option) {
-                if (is_array($option) && $option['value'] == $scopeValue) {
-                    return $option['label'];
-                }
-            }
-        }
-        return $scopeValue;
-    }
+    // private function getValueLabel(Subject $field, string $scopeValue): string
+    // {
+    //     // dd("4");
+    //     $scopeValue = trim($scopeValue);
+    //     if ($field->hasOptions()) {
+    //         if ($field->getType() === 'multiselect' && strpos($scopeValue, ',') !== false) {
+    //             return implode(
+    //                 ', ',
+    //                 array_map(
+    //                     function ($key) use ($field) {
+    //                         return $this->getValueLabel($field, $key);
+    //                     },
+    //                     explode(',', $scopeValue)
+    //                 )
+    //             );
+    //         }
+    //         foreach ($field->getOptions() as $option) {
+    //             if (is_array($option) && $option['value'] == $scopeValue) {
+    //                 return $option['label'];
+    //             }
+    //         }
+    //     }
+    //     return $scopeValue;
+    // }
 
-    private function getWebsiteParam(): ?string
-    {
-        return $this->request->getParam('website');
-    }
+    // private function getWebsiteParam(): ?string
+    // {
+    //     return $this->request->getParam('website');
+    // }
 
-    private function getStoreParam(): ?string
-    {
-        return $this->request->getParam('store');
-    }
+    // private function getStoreParam(): ?string
+    // {
+    //     return $this->request->getParam('store');
+    // }
 }
