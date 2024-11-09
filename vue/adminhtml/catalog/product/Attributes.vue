@@ -11,13 +11,19 @@
         <template #default>
             <el-form label-position="top">
                 <div v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId">
-                    <el-form-item :label="attribute.storeViewLabel">
+                    <el-form-item 
+                        :label="attribute.storeViewLabel"
+                        :class="{ 
+                            'error': _findStoreViewId(productStore.errorValues, attribute.storeViewId),
+                            'success': _findStoreViewId(productStore.successValues, attribute.storeViewId),
+                        }"
+                    >
                         <el-input 
                             v-if="productStore.config?.type === 'text'" 
                             v-model="attribute.value"
                         />
                         <select 
-                            class="el-select"
+                            class="el-select input-with-trash"
                             v-else-if="productStore.config?.type === 'select' && productStore.config?.options" 
                             @change="attribute.value = $event.target.value"
                         >
@@ -30,6 +36,15 @@
                                 {{ item.label }}
                             </option>
                         </select>
+                        <span @click="_delete(attributeCode, attribute.storeViewId)" class="trash-icon">
+                            <unicon 
+                                name="trash-alt" 
+                                width="16" 
+                                height="16" 
+                                fill="white" 
+                                class="cursor-pointer"
+                            />
+                        </span>
                     </el-form-item>
                 </div>
             </el-form>
@@ -39,7 +54,7 @@
                 <el-button @click="drawer = false">
                     Cancel
                 </el-button>
-                <el-button type="primary" @click="_post()">
+                <el-button type="primary" @click="_post()" :loading="productStore.loading">
                     Save
                 </el-button>
             </div>
@@ -98,6 +113,23 @@
     }
 
     /**
+     * Delete attribute
+     */
+    const _delete = (attributeCode: string, storeViewId: number) => {
+        productStore.deleteAttribute(props.productId, attributeCode, storeViewId)
+    }
+
+    /**
+     * Find in array
+     * 
+     * @param array 
+     * @param value 
+     */
+    const _findStoreViewId = (array: any[], storeViewId: number) => {
+        return array.find((item: any) => item.storeViewId === storeViewId)
+    }
+
+    /**
      * Setup observer after component is mounted
      */
     onMounted(() => {
@@ -116,13 +148,40 @@
 <style lang="scss">
     .el-select {
         width: 100%;
-        height: 40px;
-        border: 1px solid lightgrey;
-        border-radius: 5px;
+        border: 1px solid var(--el-border-color);
+        background-color: var(--el-input-bg-color,var(--el-fill-color-blank));
+        border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
         padding: 0 10px;
+        height: 32px;
         &:focus {
-            border-color: #409EFF;
+            border-color: var(--el-color-primary);
             outline: 0;
+        }
+        &.saved {
+            background-color: var(--el-color-success);
+        }
+    }
+    // .input-with-trash .el-input-group__prepend {
+    //     background-color: var(--el-color-error);
+    // }
+    .trash-icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        // background-color: var(--el-color-error);
+        background-color: #e6e6e6;
+        border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
+        width: 30px;
+        display: grid;
+        align-content: center;
+        justify-content: center;
+        padding-bottom: 2px;
+        padding-left: 1px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        &:hover {
+            background-color: var(--el-color-error);
         }
     }
 </style>
