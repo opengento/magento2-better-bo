@@ -103,6 +103,7 @@
 
 <script setup lang="ts">
 
+    // import { useCookies } from '@vueuse/integrations/useCookies'
     import { ref, watch, onMounted, onUnmounted } from 'vue';
     import { useProduct } from '@/vue/adminhtml/stores/product';
     import { _editorInit } from '@/vue/utils/form';
@@ -121,6 +122,9 @@
     const productStore = useProduct()
     const drawer = ref<boolean>(false)
     const attributeCode = ref<string|null>(null)
+
+    const cookie = "eyJraWQiOiIxIiwiYWxnIjoiSFMyNTYifQ.eyJ1aWQiOjEsInV0eXBpZCI6MiwiaWF0IjoxNzMxMTk5NTQ0LCJleHAiOjE3MzEyMDMxNDR9.pLW6XJwesMJ3qxqqG_IVyW9SakhWbdAyZwIpyBD1iHg"
+    productStore.bearer = cookie
 
     // Add watcher for drawer
     watch(drawer, (newValue) => {

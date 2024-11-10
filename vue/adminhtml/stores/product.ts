@@ -26,6 +26,7 @@ export const useProduct = defineStore('product', {
          */
         _differentValues(state: any) {
             return state.values.filter((currentValue: any) => {
+                console.log(currentValue)
                 const originalValue = state.originalValues.find((original: any) => original.storeViewId === currentValue.storeViewId);
                 return originalValue?.value !== currentValue.value;
             }).map((value: any) => ({
@@ -50,6 +51,9 @@ export const useProduct = defineStore('product', {
             return axios({ // Return the promise
                 url: `/rest/V1/betterbo/catalog/product/attributes`,   
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.bearer}`
+                },
                 data: {
                     entityId,
                     attributeCode,
@@ -85,6 +89,9 @@ export const useProduct = defineStore('product', {
             return axios({
                 url: `/rest/V1/betterbo/catalog/product/attributes/save`,   
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.bearer}`
+                },
                 data: {
                     entityId,
                     attributeCode,
@@ -129,6 +136,9 @@ export const useProduct = defineStore('product', {
             axios({
                 url: `/rest/V1/betterbo/catalog/product/attributes/delete`,   
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.bearer}`
+                },
                 data: {
                     entityId,
                     attributeCode,

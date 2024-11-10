@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * AdminLoginCookie
+ *
+ * @copyright Copyright © 2024 Blackbird Agency. All rights reserved.
+ * @author    sebastien@bird.eu
+ */
+
+declare(strict_types=1);
+
+namespace Opengento\BetterBo\Observer;
+
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Integration\Model\CustomUserContext;
+use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
+
+class AdminLoginCookie implements ObserverInterface
+{
+    public function __construct(
+        protected ScopeConfigInterface $scopeConfig,
+        protected \Magento\Framework\Stdlib\CookieManagerInterface $customCookieManager,
+        protected \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $customCookieMetadataFactory,
+        protected \Magento\Integration\Api\UserTokenIssuerInterface $tokenIssuer,
+        protected UserTokenParametersFactory $tokenParametersFactory,
+    ) {}
+    /**
+     * @inheritDoc
+     */
+    public function execute(Observer $observer)
+    {
+        $event = $observer->getEvent();
+        $user = $event->getUser();
+
+        $context = new CustomUserContext(
+            (int) $user->getId(),
+            CustomUserContext::USER_TYPE_ADMIN
+        );
+        $params = $this->tokenParametersFactory->create();
+
+        $token = $this->tokenIssuer->create($context, $params);
+        $this->createAdminCookie($token);
+    }
+
+    protected function createAdminCookie(string $token): void
+    {
+        $ttl = $this->scopeConfig->getValue('admin/security/session_lifetime');
+        $customCookieMetadata = $this->customCookieMetadataFactory->createPublicCookieMetadata();
+        $customCookieMetadata->setDuration($ttl);
+        // $customCookieMetadata->setPath('/admin');
+        // $customCookieMetadata->setHttpOnly(false);
+
+        $this->customCookieManager->setPublicCookie(
+            'betterbo_token',
+            $token,
+            $customCookieMetadata
+        );
+    }
+}
