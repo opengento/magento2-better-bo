@@ -5,7 +5,12 @@
     </head>
     <body>
         <referenceContainer name="content">
-            <block name="product.attribute_by_stores" template="Opengento_BetterBo::catalog/product/attribute_by_stores.phtml" before="-"/>
+            <block 
+                name="product.attribute_by_stores" 
+                template="Opengento_BetterBo::catalog/product/attribute_by_stores.phtml" 
+                class="Opengento\BetterBo\Block\Adminhtml\Catalog\Product"
+                before="-"
+            />
         </referenceContainer>
     </body>
 </page>

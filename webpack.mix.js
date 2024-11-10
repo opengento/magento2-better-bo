@@ -25,7 +25,7 @@ mix.alias({
 mix
     .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
     .vue({ version: 3 })
-    .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
+    // .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')
     .purgeCss({
         extend: {
             content: [
@@ -60,12 +60,3 @@ mix
             fontFace: false
         }
     });
-
-
-// /**
-//  * Mix TypeScript and Vue
-//  */
-// mix
-//     // .ts('view/adminhtml/web/ts/catalog/product/attributes.ts', 'view/adminhtml/web/js/catalog/product')
-//     .vue({ version: 3 })
-//     // .sass('view/adminhtml/web/scss/app.scss', 'view/adminhtml/web/css/')

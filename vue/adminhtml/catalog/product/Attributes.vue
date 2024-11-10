@@ -122,6 +122,8 @@
     const drawer = ref<boolean>(false)
     const attributeCode = ref<string|null>(null)
 
+    productStore.bearer = props.bearer
+
     // Add watcher for drawer
     watch(drawer, (newValue) => {
         if (!newValue) { // When drawer is closed

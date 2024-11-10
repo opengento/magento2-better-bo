@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import axios from 'axios'
-import { _apiResult, _message, _ttl } from '@/vue/utils/api'
+import { _axios, _message } from '@/vue/utils/api'
 
 /**
  * Category store
@@ -13,6 +12,9 @@ export const useProduct = defineStore('product', {
             successValues: [] as any,
             errorValues: [] as any,
             config: null as any,
+
+            // bearer: localStorage.getItem('token') as string,
+            bearer: null as unknown as string,
 
             loading: true as boolean,
             errorLoading: false as boolean,
@@ -47,16 +49,16 @@ export const useProduct = defineStore('product', {
             this.successValues = []
             this.errorValues = []
         
-            return axios({ // Return the promise
-                url: `/rest/V1/betterbo/catalog/product/attributes`,   
-                method: 'POST',
-                data: {
+            return _axios(
+                `catalog/product/attributes`,
+                this.bearer,
+                'POST',
+                {
                     entityId,
                     attributeCode,
-                },
-            }).then((response: any) => {
-                const data = JSON.parse(response.data)
-                console.log(data)
+                }
+            ).then((response: any) => {
+                const data = response.data
                 this.values = data.data.values
                 this.originalValues = JSON.parse(JSON.stringify(data.data.values))
                 this.config = data.data.config
@@ -82,20 +84,16 @@ export const useProduct = defineStore('product', {
 
             this.loading = true
 
-            return axios({
-                url: `/rest/V1/betterbo/catalog/product/attributes/save`,   
-                method: 'POST',
-                data: {
+            return _axios(
+                `catalog/product/attributes/save`,
+                this.bearer,
+                'POST',
+                {
                     entityId,
                     attributeCode,
                     values: this._differentValues
-                },
-                // cache: {
-                //     ttl: _ttl(),
-                //     interpretHeader: false,
-                // }
-            }).then((response: any) => {
-                // const data = JSON.parse(response.data)
+                }
+            ).then((response: any) => {
                 const data = response.data
                 this.loading = false
                 this.successValues = data?.data?.success
@@ -126,17 +124,17 @@ export const useProduct = defineStore('product', {
         deleteAttribute(entityId: number, attributeCode: string, storeViewId: number) {
             this.errorLoading = true
 
-            axios({
-                url: `/rest/V1/betterbo/catalog/product/attributes/delete`,   
-                method: 'POST',
-                data: {
+            return _axios(
+                `catalog/product/attributes/delete`,
+                this.bearer,
+                'POST',
+                {
                     entityId,
                     attributeCode,
                     storeViewId,
-                },
-            }).then((response: any) => {
-                const data = JSON.parse(response.data)
-                console.log(data)
+                }
+            ).then((response: any) => {
+                const data = response.data
                 this.errorLoading = false
             })
         }

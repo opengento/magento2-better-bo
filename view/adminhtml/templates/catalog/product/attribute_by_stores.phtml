@@ -1,10 +1,32 @@
-<?php 
-
+<?php
+    
     $productId = $block->getRequest()->getParam('id');
+    $formKey = $block->getFormKey();
+
+    $om = \Magento\Framework\App\ObjectManager::getInstance();
+
+    $cookieManager = $om->get(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+    $factory = $om->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class);
+
+    $randomToken = bin2hex(random_bytes(32));
+    $hash = hash('sha256', $randomToken);
+
+    $metadata = $factory
+         ->createPublicCookieMetadata()
+         ->setDuration(86400);
+    $cookieManager->setPublicCookie(
+         'betterbo_token',
+         $hash,
+         $metadata
+     );
+
+    // $cookieValue = $this->_cookieManager->getCookie(\[Name_Space]\[Your_Module]\Controller\Cookie\Addcookie::COOKIE_NAME);
 
 ?>
 
 <div 
     id="product_attributes"
     data-product-id="<?= $productId ?>"
+    data-form-key="<?= $formKey ?>"
+    <?= $bearer ? sprintf('data-bearer="%s"', $escaper->escapeHtmlAttr($bearer)) : '' ?>
 ></div>
