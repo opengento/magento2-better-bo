@@ -1,45 +1,73 @@
 {
-  "name": "opengento/magento2-better-bo",
-  "description": "Magento 2 module BetterBo by Opengento.",
-  "type": "magento2-module",
-  "version": "1.0.0",
-  "authors": [
-    {
-      "name": "Alexandre BULETÉ",
-      "email": "bulete.alexandre@gmail.com"
-    },
-    {
-      "name": "Frédéric MARTINEZ",
-      "email": "frederic.martinez@ph2m.com"
-    },
-    {
-      "name": "Quentin MENDEL",
-      "email": "q.mendel@boeki.fr"
-    },
-    {
-      "name": "Romain TESSON",
-      "email": "rtesson@bird.eu"
-    },
-    {
-      "name": "Sébastien GUÉRIN",
-      "email": "sebastien@bird.eu"
-    },
-    {
-      "name": "Thomas MOUTLEN",
-      "email": "thomas.moutlen@ph2m.com"
-    }
-  ],
-  "require": {
-    "php": "8.x"
-  },
-  "minimum-stability": "stable",
-  "prefer-stable": false,
-  "autoload": {
-    "files": [
-      "registration.php"
+    "name": "opengento/magento2-better-bo",
+    "description": "Magento 2 module BetterBo by Opengento.",
+    "keywords": [
+        "php",
+        "magento",
+        "magento2",
+        "admin",
+        "ui",
+        "toolbar"
     ],
-    "psr-4": {
-      "Opengento\\BetterBo\\": ""
+    "require": {
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-config": "*",
+        "magento/module-user": "*",
+        "magento/module-store": "*"
+    },
+    "require-dev": {
+        "magento/magento-coding-standard": "^5",
+        "magento/marketplace-eqp": "^4.0",
+        "roave/security-advisories": "dev-master"
+    },
+    "type": "magento2-module",
+    "license": [
+        "MIT"
+    ],
+    "homepage": "https://github.com/opengento/magento2-better-bo",
+    "authors": [
+        {
+            "name": "Opengento Team",
+            "email": "opengento@gmail.com",
+            "homepage": "https://opengento.fr/",
+            "role": "lead"
+        },
+        {
+          "name": "Alexandre BULETÉ",
+          "email": "bulete.alexandre@gmail.com"
+        },
+        {
+          "name": "Frédéric MARTINEZ",
+          "email": "frederic.martinez@ph2m.com"
+        },
+        {
+          "name": "Quentin MENDEL",
+          "email": "q.mendel@boeki.fr"
+        },
+        {
+          "name": "Romain TESSON",
+          "email": "rtesson@bird.eu"
+        },
+        {
+          "name": "Sébastien GUÉRIN",
+          "email": "sebastien@bird.eu"
+        },
+        {
+          "name": "Thomas MOUTLEN",
+          "email": "thomas.moutlen@ph2m.com"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/opengento/magento2-better-bo",
+        "issues": "https://github.com/opengento/magento2-better-bo/issues"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Opengento\\BetterBo\\": ""
+        }
     }
-  }
 }
