@@ -42,12 +42,10 @@ class AdminLoginCookie implements ObserverInterface
             CustomUserContext::USER_TYPE_ADMIN
         );
         $params = $this->tokenParametersFactory->create();
-        $token = $this->tokenIssuer->create($context, $params);
 
-        // Create token
+        $token = $this->tokenIssuer->create($context, $params);
         $this->createAdminCookie($token);
         
-        // Add these lines to save token in extra_data
         $this->saveTokenInDB($user, $token);
     }
 
@@ -59,11 +57,11 @@ class AdminLoginCookie implements ObserverInterface
      * 
      * @return void
      */
-    protected function saveTokenInDB(User $user, string $token): void
+    protected function saveTokenInDB(\Magento\AdminAdobeIms\Model\User $user, string $token): void
     {
-        $extraData = json_decode($user->getExtra(), true) ?: [];
+        $extraData = $user->getExtra() ?: [];
         $extraData['betterbo_token'] = $token;
-        $user->setExtra(json_encode($extraData));
+        $user->setExtra($extraData);
         $this->userResource->save($user);
     }
 
