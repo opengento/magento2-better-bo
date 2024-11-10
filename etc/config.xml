@@ -5,6 +5,9 @@
             <general>
                 <attributes_fields_type>text,select</attributes_fields_type>
             </general>
+            <integration>
+                <token>12345</token>
+            </integration>
         </better_bo>
     </default>
 </config>

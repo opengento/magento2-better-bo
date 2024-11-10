@@ -73,7 +73,10 @@
                         </select>
                         <el-popconfirm title="Are you sure to delete this?">
                             <template #reference>
-                                <span class="trash-icon">
+                                <span 
+                                    class="trash-icon"
+                                    @click="_delete(attributeCode, attribute.storeViewId)"
+                                >
                                     <unicon 
                                         name="trash-alt" 
                                         width="16" 
@@ -103,6 +106,7 @@
 
 <script setup lang="ts">
 
+    // import { useCookies } from '@vueuse/integrations/useCookies'
     import { ref, watch, onMounted, onUnmounted } from 'vue';
     import { useProduct } from '@/vue/adminhtml/stores/product';
     import { _editorInit } from '@/vue/utils/form';
@@ -123,6 +127,7 @@
     const attributeCode = ref<string|null>(null)
 
     productStore.bearer = props.bearer
+    console.log(props.bearer)
 
     // Add watcher for drawer
     watch(drawer, (newValue) => {
