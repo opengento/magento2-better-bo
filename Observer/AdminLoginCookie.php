@@ -42,12 +42,26 @@ class AdminLoginCookie implements ObserverInterface
             CustomUserContext::USER_TYPE_ADMIN
         );
         $params = $this->tokenParametersFactory->create();
-
         $token = $this->tokenIssuer->create($context, $params);
+
+        // Create token
         $this->createAdminCookie($token);
         
         // Add these lines to save token in extra_data
-        $extraData = $user->getExtra() ?: [];
+        $this->saveTokenInDB($user, $token);
+    }
+
+    /**
+     * Save token in extra_data
+     * 
+     * @param User $user
+     * @param string $token
+     * 
+     * @return void
+     */
+    protected function saveTokenInDB(User $user, string $token): void
+    {
+        $extraData = json_decode($user->getExtra(), true) ?: [];
         $extraData['betterbo_token'] = $token;
         $user->setExtra(json_encode($extraData));
         $this->userResource->save($user);
@@ -55,6 +69,8 @@ class AdminLoginCookie implements ObserverInterface
 
     /**
      * Create admin cookie
+     * 
+     * @deprecated
      * 
      * @param string $token
      * 

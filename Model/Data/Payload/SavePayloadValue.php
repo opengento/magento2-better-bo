@@ -18,12 +18,12 @@ class SavePayloadValue implements SavePayloadValueInterface
     /**
      * @var string
      */
-    protected string $value;
+    protected ?string $value = null;
 
     /**
      * @var string
      */
-    protected string $storeViewId;
+    protected string $storeViewId = '';
 
     /**
      * @inheritDoc

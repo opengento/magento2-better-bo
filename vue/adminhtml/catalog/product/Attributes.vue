@@ -16,15 +16,15 @@
                 </div>
 
                 <div 
-                    v-for="(attribute, index) in productStore.values" :key="attribute.storeViewId"
+                    v-for="(attribute, index) in productStore.values" :key="attribute.store_view_id"
                     class="drawer-row"
                 >
                     <el-form-item 
-                        :label="attribute.storeViewLabel"
+                        :label="attribute.store_view_label"
                         :class="{ 
                             'test': true,
-                            'error': _findStoreViewId(productStore.errorValues, attribute.storeViewId),
-                            'success': _findStoreViewId(productStore.successValues, attribute.storeViewId),
+                            'error': _findStoreViewId(productStore.errorValues, attribute.store_view_id),
+                            'success': _findStoreViewId(productStore.successValues, attribute.store_view_id),
                         }"
                     >
                         <el-input 
@@ -75,7 +75,7 @@
                             <template #reference>
                                 <span 
                                     class="trash-icon"
-                                    @click="_delete(attributeCode, attribute.storeViewId)"
+                                    @click="_delete(attributeCode, attribute.store_view_id)"
                                 >
                                     <unicon 
                                         name="trash-alt" 

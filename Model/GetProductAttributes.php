@@ -95,8 +95,8 @@ class GetProductAttributes implements GetProductAttributesInterface
             function (AttributeOptionInterface $attributeOption)  {
                 /** @var GetResponseConfigOptionsInterface $option */
                 $option = $this->getResponseConfigOptionsInterfaceFactory->create();
-                $option->setLabel($attributeOption->getLabel());
-                $option->setValue($attributeOption->getValue());
+                $option->setLabel((string) $attributeOption->getLabel());
+                $option->setValue((string) $attributeOption->getValue());
                 return $option;
             },
             $attribute->getOptions()

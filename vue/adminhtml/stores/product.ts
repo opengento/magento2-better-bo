@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import axios from 'axios'
-import { _axios, _message } from '@/vue/utils/api'
+import { _axios, _message, _catch } from '@/vue/utils/api'
 
 /**
  * Category store
@@ -30,10 +30,10 @@ export const useProduct = defineStore('product', {
         _differentValues(state: any) {
             return state.values.filter((currentValue: any) => {
                 console.log(currentValue)
-                const originalValue = state.originalValues.find((original: any) => original.storeViewId === currentValue.storeViewId);
+                const originalValue = state.originalValues.find((original: any) => original.store_view_id === currentValue.store_view_id);
                 return originalValue?.value !== currentValue.value;
             }).map((value: any) => ({
-                storeViewId: value.storeViewId,
+                store_view_id: value.store_view_id,
                 value: value.value
             }))
         }
@@ -66,6 +66,9 @@ export const useProduct = defineStore('product', {
                 this.values = data.data.values
                 this.originalValues = JSON.parse(JSON.stringify(data.data.values))
                 this.config = data.data.config
+                this.loading = false
+            }).catch((error: any) => {
+                _catch(error)
                 this.loading = false
             })
         },
@@ -118,6 +121,9 @@ export const useProduct = defineStore('product', {
                         message: `Values not saved for ${this.errorValues.length} stores`
                     })
                 }
+            }).catch((error: any) => {
+                _catch(error)
+                this.loading = false
             })
         },
         /**
@@ -143,6 +149,9 @@ export const useProduct = defineStore('product', {
                 }
             }).then((response: any) => {
                 const data = response.data
+                this.errorLoading = false
+            }).catch((error: any) => {
+                _catch(error)
                 this.errorLoading = false
             })
         }

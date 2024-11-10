@@ -33,16 +33,22 @@ class SaveProductAttributes
     {
         $success = $error = [];
 
-        $dataByStoreId = array_reduce(
-            $payload->getValues(),
-            static function ($r, SavePayloadValueInterface $value) use ($payload) {
-                $r[$value->getStoreViewId()] = [
-                    $payload->getAttributeCode() => $value->getValue()
-                ];
-                return $r;
-            },
-            []
-        );
+        // $dataByStoreId = array_reduce(
+        //     $payload->getValues(),
+        //     static function ($r, SavePayloadValueInterface $value) use ($payload) {
+        //         $r[$value->getStoreViewId()] = [
+        //             $payload->getAttributeCode() => $value->getValue()
+        //         ];
+        //         return $r;
+        //     },
+        //     []
+        // );
+        $dataByStoreId = [];
+        foreach ($payload->getValues() as $value) {
+            $dataByStoreId[$value->getStoreViewId()] = [
+                $payload->getAttributeCode() => $value->getValue()
+            ];
+        }
 
         foreach ($dataByStoreId as $storeId => $data) {
             try {
