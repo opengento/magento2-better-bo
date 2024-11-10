@@ -1,6 +1,6 @@
 # Better BO for Magento 2
 
-[![Latest Stable Version](https://img.shields.io/packagist/v/opengento/module-better-bo.svg?style=flat-square)](https://packagist.org/packages/opengento/better-bo)
+[![Latest Stable Version](https://img.shields.io/packagist/v/opengento/module-better-bo.svg?style=flat-square)](https://packagist.org/packages/opengento/magento2-better-bo)
 [![License: MIT](https://img.shields.io/github/license/opengento/magento2-better-bo.svg?style=flat-square)](./LICENSE)
 
 This extension enhance Magento back-office.
