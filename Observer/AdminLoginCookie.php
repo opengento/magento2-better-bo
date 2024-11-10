@@ -16,6 +16,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Integration\Model\CustomUserContext;
 use Magento\Integration\Model\UserToken\UserTokenParametersFactory;
+use Magento\User\Model\ResourceModel\User;
 
 class AdminLoginCookie implements ObserverInterface
 {
@@ -25,7 +26,9 @@ class AdminLoginCookie implements ObserverInterface
         protected \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $customCookieMetadataFactory,
         protected \Magento\Integration\Api\UserTokenIssuerInterface $tokenIssuer,
         protected UserTokenParametersFactory $tokenParametersFactory,
+        protected User $userResource,  // Add this line
     ) {}
+
     /**
      * @inheritDoc
      */
@@ -42,8 +45,21 @@ class AdminLoginCookie implements ObserverInterface
 
         $token = $this->tokenIssuer->create($context, $params);
         $this->createAdminCookie($token);
+        
+        // Add these lines to save token in extra_data
+        $extraData = $user->getExtra() ?: [];
+        $extraData['betterbo_token'] = $token;
+        $user->setExtra(json_encode($extraData));
+        $this->userResource->save($user);
     }
 
+    /**
+     * Create admin cookie
+     * 
+     * @param string $token
+     * 
+     * @return void
+     */
     protected function createAdminCookie(string $token): void
     {
         $ttl = $this->scopeConfig->getValue('admin/security/session_lifetime');
