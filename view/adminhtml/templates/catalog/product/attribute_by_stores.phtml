@@ -5,7 +5,7 @@
 
     $user = $block->getAuth()->getUser();
 
-    $extraData = json_decode($user->getExtra(), true) ?: [];
+    $extraData = $user->getExtra() ?: [];
     $bearer = $extraData['betterbo_token'] ?? null;
 
 ?>
