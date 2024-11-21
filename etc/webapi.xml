@@ -7,13 +7,6 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
-    <route url="/V1/betterbo/authenticate" method="GET">
-        <service class="Opengento\BetterBo\Api\AuthenticatorInterface" method="authenticate"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-
     <!-- Get product attribute config and value -->
     <route url="/V1/betterbo/catalog/product/attributes" method="POST">
         <service class="Opengento\BetterBo\Api\ProductManagementInterface" method="getProductData"/>

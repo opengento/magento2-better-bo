@@ -19,5 +19,4 @@
 
     <preference for="Opengento\BetterBo\Api\ProductManagementInterface" type="Opengento\BetterBo\Model\ProductManagement" />
     <preference for="Opengento\BetterBo\Api\GetProductAttributesInterface" type="Opengento\BetterBo\Model\GetProductAttributes" />
-    <preference for="Opengento\BetterBo\Api\AuthenticatorInterface" type="Opengento\BetterBo\Model\Authenticator" />
 </config>
