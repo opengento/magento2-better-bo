@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="backend_auth_user_login_success">
-        <observer name="opengento_betterbo_cookie_create"
-                  instance="Opengento\BetterBo\Observer\AdminLoginCookie"/>
+        <observer name="opengento_betterbo_token_create"
+                  instance="Opengento\BetterBo\Observer\AdminLoginToken"/>
     </event>
 </config>
